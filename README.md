@@ -21,9 +21,11 @@ There are probably plenty of bugs to be found and to be fixed, and probably some
 * Saving settings to a file
 * Loading settings from a file
 * Saving & loading default settings from root folder
-* Ctrl+R for quick start of AbsoluteTouch
+* Keyboard shortcuts
+	* Ctrl+R for quick start of AbsoluteTouch
 
 # Known issues / incomplete stuff
 
 * Plotting tab still needs to be completed.
 * Not much debugging done, definitely possible to encounter issues
+* Loading/Saving system is probably inefficient and needs revision
