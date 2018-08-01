@@ -1,12 +1,8 @@
 
 *.setup
 *.exe
-.vs/absolutetouch gui/DesignTimeBuild/.dtbcache
-.vs/absolutetouch gui/v15/.suo
-.vs/absolutetouch gui/v15/Server/sqlite3/db.lock
-.vs/absolutetouch gui/v15/Server/sqlite3/storage-DELL.ide-shm
-.vs/absolutetouch gui/v15/Server/sqlite3/storage-DELL.ide-wal
-.vs/absolutetouch gui/v15/Server/sqlite3/storage-DESKTOP-CA4RK28.ide
-.vs/absolutetouch gui/v15/Server/sqlite3/storage.ide
-.vs/absolutetouch gui/v15/Server/sqlite3/storage.ide-shm
-.vs/absolutetouch gui/v15/Server/sqlite3/storage.ide-wal
+*.dtbcache
+.vs/*
+*.ide-shm
+*.ide-wal
+*.ide
