@@ -52,10 +52,7 @@ namespace absolutetouch_gui
 
         #region Keyboard Shortcuts
 
-        public void RunShortcut(Object sender, ExecutedRoutedEventArgs e)
-        {
-            RunAbsoluteTouch();
-        }
+        public void RunShortcut(Object sender, ExecutedRoutedEventArgs e) => RunAbsoluteTouch();
 
         #endregion
 
@@ -69,6 +66,7 @@ namespace absolutetouch_gui
             //-m             | Enables the touchpad on start, disables it on exit
             //-w weight      | weight Sets the touch smoothing weight factor(0 to 1, default 0)
             //-d             | Enables debug mode(may reduce performance)
+            //-c             | Enables touchscreen-like clicking
             
             CollectInformation();
             try
@@ -250,15 +248,7 @@ namespace absolutetouch_gui
             {
                 AspectRatioCalc = Convert.ToInt32((double.Parse(screenY2.Text) / double.Parse(screenX2.Text)) * double.Parse(touchpadX2.Text));
             }
-            catch(DivideByZeroException)
-            {
-                return;
-            }
-            catch(System.OverflowException)
-            {
-                return;
-            }
-            catch(System.FormatException)
+            catch
             {
                 return;
             }
@@ -271,6 +261,9 @@ namespace absolutetouch_gui
 
             try
             {
+                //  -- Note --
+                //  This code could probably be cleaned up / improved, possibly StreamReader?
+                
                 // Input settings tab
                 // Screen bounds
                 screenX1.Text = System.IO.File.ReadLines(settingsLocation).Take(1).First();

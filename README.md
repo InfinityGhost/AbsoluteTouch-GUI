@@ -5,7 +5,7 @@ There are probably plenty of bugs to be found and to be fixed, and probably some
 
 # Requirements
 
-* AbsoluteTouch 1.2 or greater
+* [AbsoluteTouch](https://github.com/apsun/AbsoluteTouch) 1.2 or greater
 	* All prerequisites of AbsoluteTouch
 
 # Notes
