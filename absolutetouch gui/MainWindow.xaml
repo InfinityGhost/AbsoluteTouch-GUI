@@ -1,0 +1,136 @@
+﻿<Window x:Class="absolutetouch_gui.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:absolutetouch_gui"
+        mc:Ignorable="d"
+        Title="AbsoluteTouch GUI" Height="400" Width="600" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <RoutedCommand x:Key="RunProgram"/>
+    </Window.Resources>
+
+    <Window.CommandBindings>
+        <CommandBinding Command="{StaticResource RunProgram}" Executed="RunShortcut"/>
+    </Window.CommandBindings>
+
+    <Window.InputBindings>
+        <KeyBinding Key="R" Modifiers="Ctrl" Command="{StaticResource RunProgram}"/>
+    </Window.InputBindings>
+    <Grid>
+        <Menu Height="24" VerticalAlignment="Top">
+            <MenuItem Header="File" Height="24" Margin="10,0,0,0">
+                <MenuItem x:Name="AboutButton" Header="About" Click="AboutButton_Click"/>
+                <MenuItem x:Name="LoadSettingsButton" Header="Load settings" Click="LoadSettingsButton_Click"/>
+                <MenuItem x:Name="SaveSettingsButton" Header="Save settings" Click="SaveSettingsButton_Click"/>
+                <MenuItem x:Name="SaveDefaultButton" Header="Save default settings" Click="SaveDefaultButton_Click"/>
+                <MenuItem x:Name="ExitButton" Header="Exit" Click="ExitButton_Click"/>
+                
+            </MenuItem>
+            <MenuItem Header="Settings" Height="24">
+                <MenuItem x:Name="GetResolution" Header="Reset to default" Click="GetResolution_Click"/>
+                <MenuItem x:Name="UpdateArgumentsButton" Header="Force arguments update" Click="UpdateArgumentsButton_Click"/>
+            </MenuItem>
+            <MenuItem x:Name="RunMenuButton" Header="Run" Click="RunButton_Click" InputGestureText="Ctrl+R"/>
+        </Menu>
+        <TabControl Margin="0,25,0,0">
+            <TabItem x:Name="InputSettingsTab" Header="Input Settings">
+                <Grid>
+                    <GroupBox Header="Settings" Margin="0,0,0,50">
+                        <Grid>
+                            <Label Content="Screen Coordinates" HorizontalAlignment="Left" Margin="80,1,0,0" VerticalAlignment="Top" Height="26"/>
+                            <GroupBox Header="X1" HorizontalAlignment="Left" Height="50" Margin="10,24,0,0" VerticalAlignment="Top" Width="122">
+                                <TextBox x:Name="screenX1" Margin="2" Height="23" />
+                            </GroupBox>
+                            <GroupBox Header="X2" HorizontalAlignment="Left" Height="50" Margin="142,24,0,0" VerticalAlignment="Top" Width="122">
+                                <TextBox x:Name="screenX2" Margin="2" Height="23" />
+                            </GroupBox>
+                            <GroupBox Header="Y1" HorizontalAlignment="Left" Height="50" Margin="10,79,0,0" VerticalAlignment="Top" Width="122">
+                                <TextBox x:Name="screenY1" Margin="2" Height="23" />
+                            </GroupBox>
+                            <GroupBox Header="Y2" HorizontalAlignment="Left" Height="50" Margin="142,79,0,0" VerticalAlignment="Top" Width="122">
+                                <TextBox x:Name="screenY2" Margin="2" Height="23" />
+                            </GroupBox>
+                            <GroupBox Header="X1" HorizontalAlignment="Left" Height="50" Margin="310,24,0,0" VerticalAlignment="Top" Width="122">
+                                <TextBox x:Name="touchpadX1" Margin="2" Height="23" />
+                            </GroupBox>
+                            <GroupBox Header="X2" HorizontalAlignment="Left" Height="50" Margin="442,24,0,0" VerticalAlignment="Top" Width="122">
+                                <TextBox x:Name="touchpadX2" Margin="2" Height="23"  TextChanged="TouchpadX2_TextChanged"/>
+                            </GroupBox>
+                            <Label Content="Touchpad Coordinates" HorizontalAlignment="Left" Margin="372,1,0,0" VerticalAlignment="Top" Height="26"/>
+
+                            <GroupBox Header="Y1" HorizontalAlignment="Left" Height="50" Margin="310,79,0,0" VerticalAlignment="Top" Width="122">
+                                <TextBox x:Name="touchpadY1" Margin="2" Height="23" />
+                            </GroupBox>
+                            <GroupBox Header="Y2" HorizontalAlignment="Left" Height="50" Margin="442,79,0,0" VerticalAlignment="Top" Width="122">
+                                <TextBox x:Name="touchpadY2" Margin="2" Height="23" />
+                            </GroupBox>
+
+                            <GroupBox Header="Weight" Margin="10,134,0,0" HorizontalAlignment="Left" Width="554" Height="50" VerticalAlignment="Top">
+                                <Grid>
+                                    <Slider x:Name="WeightSlider" Margin="2,4,47,1" Height="23" Maximum="1" SmallChange="0.01" IsSnapToTickEnabled="True" ValueChanged="WeightSlider_ValueChanged" ToolTip="Sets the touch smoothing factor (0 - 1)" LargeChange=".10" TickFrequency="0.01" />
+                                    <TextBox x:Name="WeightTextbox" Margin="500,2,2,2" Height="23" TextChanged="WeightTextbox_TextChanged"/>
+                                    <!--<Label Width="21" HorizontalAlignment="Right" Margin="0">%</Label>-->
+                                </Grid>
+                            </GroupBox>
+                            <CheckBox x:Name="UseOffset" Content="Use offset (in offset tab)" HorizontalAlignment="Left" Height="16" Margin="20,192,0,0" VerticalAlignment="Top" Click="UseOffset_Clicked"/>
+                            <CheckBox x:Name="LockAspectRatio" Content="Lock aspect ratio" HorizontalAlignment="Left" Height="16" Margin="20,213,0,0" VerticalAlignment="Top" Click="LockAspectRatio_Click"/>
+                            <CheckBox x:Name="EnableClick" Content="Enable click (Github build only)" HorizontalAlignment="Left" Height="16" Margin="196,192,0,0" VerticalAlignment="Top" Click="EnableClick_Clicked"/>
+                            <CheckBox x:Name="DisableOnExit" Content="Disable touchpad on exit" HorizontalAlignment="Left" Height="16" Margin="196,213,0,0" VerticalAlignment="Top" Click="DisableOnExit_Click"/>
+                        </Grid>
+                    </GroupBox>
+                    <Button x:Name="RunButton" Content="Run" Margin="256,273,0,0" Click="RunButton_Click" HorizontalAlignment="Left" Width="74" Height="30" VerticalAlignment="Top" Command="{StaticResource RunProgram}"/>
+                    <!--<Button x:Name="TouchpadAspectRatioUpdate" Content="Aspect Ratio Update" Margin="383,273,0,0" HorizontalAlignment="Left" Width="120" Height="30" VerticalAlignment="Top" Click="TouchpadAspectRatioUpdate_Click"/>-->
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="OffsetTab" Header="Offset">
+                <Grid>
+                    <GroupBox Margin="10,12,0,0" Height="50" Header="Screen Horizontal Offset" VerticalAlignment="Top" HorizontalAlignment="Left" Width="265">
+                        <Grid>
+                            <Slider x:Name="ScreenXOffset" AutoToolTipPlacement="TopLeft" ValueChanged="ScreenXOffset_ValueChanged" TickFrequency="10" IsSnapToTickEnabled="True" SmallChange="0" Margin="5,4,50,1"/>
+                            <TextBox x:Name="ScreenXOffsetTextbox" Height="23" Margin="208,2,5,2" TextChanged="ScreenXOffsetTextbox_TextChanged"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Margin="10,67,0,0" Height="50" Header="Screen Vertical Offset" VerticalAlignment="Top" HorizontalAlignment="Left" Width="265">
+                        <Grid>
+                            <Slider x:Name="ScreenYOffset" AutoToolTipPlacement="TopLeft" TickFrequency="10" IsSnapToTickEnabled="True" Margin="5,4,0,1" HorizontalAlignment="Left" Width="198" ValueChanged="ScreenYOffset_ValueChanged"/>
+                            <TextBox x:Name="ScreenYOffsetTextbox" Height="23" Margin="208,2,5,2" TextChanged="ScreenYOffsetTextbox_TextChanged"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Margin="10,122,0,0" Height="50" Header="Touchpad Horizontal Offset" VerticalAlignment="Top" HorizontalAlignment="Left" Width="265">
+                        <Grid>
+                            <Slider x:Name="TouchpadXOffset" Maximum="4864" AutoToolTipPlacement="TopLeft" TickFrequency="10" IsSnapToTickEnabled="True" Margin="5,4,50,1" ValueChanged="TouchpadXOffset_ValueChanged"/>
+                            <TextBox x:Name="TouchpadXOffsetTextbox" Margin="208,2,5,3" TextChanged="TouchpadXOffsetTextbox_TextChanged"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox  Margin="10,177,0,0" Height="50" Header="Touchpad Vertical Offset" VerticalAlignment="Top" HorizontalAlignment="Left" Width="265">
+                        <Grid>
+                            <Slider x:Name="TouchpadYOffset" Maximum="3840" AutoToolTipPlacement="TopLeft" TickFrequency="10" IsSnapToTickEnabled="True" Margin="5,4,50,1" ValueChanged="TouchpadYOffset_ValueChanged"/>
+                            <TextBox x:Name="TouchpadYOffsetTextbox" Height="23" Margin="208,2,5,2" TextChanged="TouchpadYOffsetTextbox_TextChanged"/>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="SetupTab" Header="Setup">
+                <Grid>
+                    <GroupBox Header="AbsoluteTouch Install Location" Height="50" VerticalAlignment="Top">
+                        <Grid>
+                            <TextBox x:Name="InstallLocationTextbox" Margin="0,2,0,0" Height="23" VerticalAlignment="Top" TextChanged="InstallLocationTextbox_TextChanged" HorizontalAlignment="Left" Width="499"/>
+                            <Button x:Name="FindInstallLocationButton" Content="Find..." HorizontalAlignment="Left" Margin="504,2,0,0" VerticalAlignment="Top" Height="23" Width="60" Click="FindInstallLocationButton_Click"/>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="PlottingTab" Header="Plotting">
+                <Grid>
+                    <GroupBox Header="Screen" HorizontalAlignment="Left" Width="281" Height="158" VerticalAlignment="Top" Cursor="Hand">
+                        <Canvas x:Name="canvasScreenMap" Cursor="Hand" Background="Transparent" ClipToBounds="False"/>
+                    </GroupBox>
+                    <GroupBox Header="Touchpad" Margin="0,158,0,0" Height="158" VerticalAlignment="Top" HorizontalAlignment="Left" Width="281">
+                        <Canvas x:Name="canvasTouchpadArea" Cursor="Hand" Background="Transparent" ClipToBounds="False"/>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

@@ -1,0 +1,32 @@
+C:\Users\Christian\source\repos\absolutetouch gui\absolutetouch gui\bin\Release\absolutetouch gui.exe.config
+C:\Users\Christian\source\repos\absolutetouch gui\absolutetouch gui\bin\Release\absolutetouch gui.exe
+C:\Users\Christian\source\repos\absolutetouch gui\absolutetouch gui\bin\Release\absolutetouch gui.pdb
+C:\Users\Christian\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\absolutetouch gui.csprojAssemblyReference.cache
+C:\Users\Christian\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\MainWindow.g.cs
+C:\Users\Christian\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\App.g.cs
+C:\Users\Christian\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\absolutetouch gui_MarkupCompile.cache
+C:\Users\Christian\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\absolutetouch gui_MarkupCompile.lref
+C:\Users\Christian\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\MainWindow.baml
+C:\Users\Christian\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\absolutetouch gui.g.resources
+C:\Users\Christian\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\absolutetouch_gui.AboutBox.resources
+C:\Users\Christian\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\absolutetouch_gui.Properties.Resources.resources
+C:\Users\Christian\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\absolutetouch gui.csproj.GenerateResource.cache
+C:\Users\Christian\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\absolutetouch gui.csproj.CoreCompileInputs.cache
+C:\Users\Christian\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\absolutetouch gui.exe
+C:\Users\Christian\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\absolutetouch gui.pdb
+C:\Users\Christian\OneDrive\Code\source\repos\absolutetouch gui\absolutetouch gui\bin\Release\absolutetouch gui.exe.config
+C:\Users\Christian\OneDrive\Code\source\repos\absolutetouch gui\absolutetouch gui\bin\Release\absolutetouch gui.exe
+C:\Users\Christian\OneDrive\Code\source\repos\absolutetouch gui\absolutetouch gui\bin\Release\absolutetouch gui.pdb
+C:\Users\Christian\OneDrive\Code\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\absolutetouch gui.csprojAssemblyReference.cache
+C:\Users\Christian\OneDrive\Code\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\MainWindow.g.cs
+C:\Users\Christian\OneDrive\Code\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\App.g.cs
+C:\Users\Christian\OneDrive\Code\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\absolutetouch gui_MarkupCompile.cache
+C:\Users\Christian\OneDrive\Code\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\absolutetouch gui_MarkupCompile.lref
+C:\Users\Christian\OneDrive\Code\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\MainWindow.baml
+C:\Users\Christian\OneDrive\Code\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\absolutetouch gui.g.resources
+C:\Users\Christian\OneDrive\Code\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\absolutetouch_gui.AboutBox.resources
+C:\Users\Christian\OneDrive\Code\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\absolutetouch_gui.Properties.Resources.resources
+C:\Users\Christian\OneDrive\Code\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\absolutetouch gui.csproj.GenerateResource.cache
+C:\Users\Christian\OneDrive\Code\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\absolutetouch gui.csproj.CoreCompileInputs.cache
+C:\Users\Christian\OneDrive\Code\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\absolutetouch gui.exe
+C:\Users\Christian\OneDrive\Code\source\repos\absolutetouch gui\absolutetouch gui\obj\Release\absolutetouch gui.pdb
