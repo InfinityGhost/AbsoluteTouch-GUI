@@ -6,3 +6,5 @@
 *.ide-shm
 *.ide-wal
 *.ide
+absolutetouch gui/obj/*
+absolutetouch gui/bin/*
