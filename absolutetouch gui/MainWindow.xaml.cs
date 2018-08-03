@@ -266,31 +266,31 @@ namespace absolutetouch_gui
                 
                 // Input settings tab
                 // Screen bounds
-                screenX1.Text = System.IO.File.ReadLines(settingsLocation).Take(1).First();
-                screenY1.Text = System.IO.File.ReadLines(settingsLocation).Skip(1).Take(1).First();
-                screenX2.Text = System.IO.File.ReadLines(settingsLocation).Skip(2).Take(1).First();
-                screenY2.Text = System.IO.File.ReadLines(settingsLocation).Skip(3).Take(1).First();
+                screenX1.Text = File.ReadLines(settingsLocation).Take(1).First();
+                screenY1.Text = File.ReadLines(settingsLocation).Skip(1).Take(1).First();
+                screenX2.Text = File.ReadLines(settingsLocation).Skip(2).Take(1).First();
+                screenY2.Text = File.ReadLines(settingsLocation).Skip(3).Take(1).First();
                 // Touchpad bounds
-                touchpadX1.Text = System.IO.File.ReadLines(settingsLocation).Skip(4).Take(1).First();
-                touchpadY1.Text = System.IO.File.ReadLines(settingsLocation).Skip(5).Take(1).First();
-                touchpadX2.Text = System.IO.File.ReadLines(settingsLocation).Skip(6).Take(1).First();
-                touchpadY2.Text = System.IO.File.ReadLines(settingsLocation).Skip(7).Take(1).First();
+                touchpadX1.Text = File.ReadLines(settingsLocation).Skip(4).Take(1).First();
+                touchpadY1.Text = File.ReadLines(settingsLocation).Skip(5).Take(1).First();
+                touchpadX2.Text = File.ReadLines(settingsLocation).Skip(6).Take(1).First();
+                touchpadY2.Text = File.ReadLines(settingsLocation).Skip(7).Take(1).First();
                 // Sliders
-                WeightSlider.Value = double.Parse(System.IO.File.ReadLines(settingsLocation).Skip(8).Take(1).First());
+                WeightSlider.Value = double.Parse(File.ReadLines(settingsLocation).Skip(8).Take(1).First());
                 // Checkboxes
-                UseOffset.IsChecked = bool.Parse(System.IO.File.ReadLines(settingsLocation).Skip(9).Take(1).First());
-                LockAspectRatio.IsChecked = bool.Parse(System.IO.File.ReadLines(settingsLocation).Skip(10).Take(1).First());
-                EnableClick.IsChecked = bool.Parse(System.IO.File.ReadLines(settingsLocation).Skip(11).Take(1).First());
-                DisableOnExit.IsChecked = bool.Parse(System.IO.File.ReadLines(settingsLocation).Skip(12).Take(1).First());
+                UseOffset.IsChecked = bool.Parse(File.ReadLines(settingsLocation).Skip(9).Take(1).First());
+                LockAspectRatio.IsChecked = bool.Parse(File.ReadLines(settingsLocation).Skip(10).Take(1).First());
+                EnableClick.IsChecked = bool.Parse(File.ReadLines(settingsLocation).Skip(11).Take(1).First());
+                DisableOnExit.IsChecked = bool.Parse(File.ReadLines(settingsLocation).Skip(12).Take(1).First());
                 // Offset tab
                 // Sliders
-                ScreenXOffset.Value = double.Parse(System.IO.File.ReadLines(settingsLocation).Skip(13).Take(1).First());
-                ScreenYOffset.Value = double.Parse(System.IO.File.ReadLines(settingsLocation).Skip(14).Take(1).First());
-                TouchpadXOffset.Value = double.Parse(System.IO.File.ReadLines(settingsLocation).Skip(15).Take(1).First());
-                TouchpadYOffset.Value = double.Parse(System.IO.File.ReadLines(settingsLocation).Skip(16).Take(1).First());
+                ScreenXOffset.Value = double.Parse(File.ReadLines(settingsLocation).Skip(13).Take(1).First());
+                ScreenYOffset.Value = double.Parse(File.ReadLines(settingsLocation).Skip(14).Take(1).First());
+                TouchpadXOffset.Value = double.Parse(File.ReadLines(settingsLocation).Skip(15).Take(1).First());
+                TouchpadYOffset.Value = double.Parse(File.ReadLines(settingsLocation).Skip(16).Take(1).First());
                 // Setup tab
                 // Textboxes
-                InstallLocationTextbox.Text = System.IO.File.ReadLines(settingsLocation).Skip(17).Take(1).First();
+                InstallLocationTextbox.Text = File.ReadLines(settingsLocation).Skip(17).Take(1).First();
             }
             catch (System.ArgumentException)
             {
@@ -324,8 +324,8 @@ namespace absolutetouch_gui
         {
             try
             {
-                System.IO.File.WriteAllText(settingsLocation, String.Empty);
-                System.IO.StreamWriter saveSettings = System.IO.File.AppendText(settingsLocation);
+                File.WriteAllText(settingsLocation, String.Empty);
+                StreamWriter saveSettings = File.AppendText(settingsLocation);
                 // Input settings tab
                 // Screen bounds
                 saveSettings.WriteLine(screenX1.Text);
@@ -383,18 +383,12 @@ namespace absolutetouch_gui
 
         public void DefaultSettingsCheck()
         {
-            if (System.IO.File.Exists(System.IO.Directory.GetCurrentDirectory() + @"\AbsoluteTouchDefault.setup") == true)
+            if (File.Exists(Directory.GetCurrentDirectory() + @"\AbsoluteTouchDefault.setup") == true)
             {
-                settingsLocation = System.IO.Directory.GetCurrentDirectory() + @"\AbsoluteTouchDefault.setup";
+                settingsLocation = Directory.GetCurrentDirectory() + @"\AbsoluteTouchDefault.setup";
                 LoadSettings();
             }
         }
-
-        #endregion
-
-        #region  Canvas Methods
-
-        // Refer to Canvas.cs
 
         #endregion
 
@@ -584,7 +578,7 @@ namespace absolutetouch_gui
 
         private void SaveDefaultButton_Click(object sender, RoutedEventArgs e)
         {
-            settingsLocation = System.IO.Directory.GetCurrentDirectory() + @"\AbsoluteTouchDefault.setup";
+            settingsLocation = Directory.GetCurrentDirectory() + @"\AbsoluteTouchDefault.setup";
             SaveSettings();
         }
 
