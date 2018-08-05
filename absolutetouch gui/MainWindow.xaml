@@ -79,7 +79,7 @@
                             <CheckBox x:Name="DisableOnExit" Content="Disable touchpad on exit" HorizontalAlignment="Left" Height="16" Margin="196,213,0,0" VerticalAlignment="Top" Click="DisableOnExit_Click"/>
                         </Grid>
                     </GroupBox>
-                    <Button x:Name="RunButton" Content="Run" Margin="256,273,0,0" Click="RunButton_Click" HorizontalAlignment="Left" Width="74" Height="30" VerticalAlignment="Top" Command="{StaticResource RunProgram}"/>
+                    <Button x:Name="RunButton" Content="Run" Click="RunButton_Click" HorizontalAlignment="Center" Width="74" Height="30" VerticalAlignment="Bottom" Command="{StaticResource RunProgram}" Margin="0,0,0,10"/>
                     <!--<Button x:Name="TouchpadAspectRatioUpdate" Content="Aspect Ratio Update" Margin="383,273,0,0" HorizontalAlignment="Left" Width="120" Height="30" VerticalAlignment="Top" Click="TouchpadAspectRatioUpdate_Click"/>-->
                 </Grid>
             </TabItem>

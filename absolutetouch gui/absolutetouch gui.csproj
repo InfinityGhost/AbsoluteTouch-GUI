@@ -52,6 +52,18 @@
     <ApplicationIcon>AbsoluteTouch GUI icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Interop.SYNCOMLib">
+      <HintPath>F:\OneDrive\Interop.SYNCOMLib.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.SYNCTRLLib">
+      <HintPath>F:\OneDrive\Interop.SYNCTRLLib.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.SynTPEnhLib">
+      <HintPath>F:\OneDrive\Interop.SynTPEnhLib.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />

@@ -25,9 +25,16 @@ namespace absolutetouch_gui
     {
         public MainWindow()
         {
+            // Startup methods
+
             InitializeComponent();
+
+            SynapticsAPI_detect();
+
             Defaults();
+
             DefaultSettingsCheck();
+
             UpdateUseableOptions();
         }
 
@@ -45,8 +52,20 @@ namespace absolutetouch_gui
         // resolutions
         public double screenWidth = Screen.PrimaryScreen.Bounds.Width;
         public double screenHeight = Screen.PrimaryScreen.Bounds.Height;
-        public double touchpadWidth = 4684;
-        public double touchpadHeight = 3840;
+        public double touchpadWidth;
+        public double touchpadHeight;
+
+        // Synaptics API variables
+        
+        SYNCTRLLib.SynAPICtrl api;
+        SYNCTRLLib.SynDeviceCtrl device;
+        int deviceHandle;
+        int xMin;
+        int xMax;
+        int yMin;
+        int yMax;
+        int xDPI;
+        int yDPI;
 
         #endregion
 
@@ -148,13 +167,15 @@ namespace absolutetouch_gui
             TouchpadXOffsetTextbox.Text = "0";
             TouchpadYOffsetTextbox.Text = "0";
 
+            GetTouchpadProperties();
+
             // Set max offsets
             ScreenXOffset.Maximum = screenWidth;
             ScreenYOffset.Maximum = screenHeight;
-            TouchpadXOffset.Maximum = touchpadWidth;
-            TouchpadYOffset.Maximum = touchpadHeight;
+            TouchpadXOffset.Maximum = Convert.ToDouble(xMax);
+            TouchpadYOffset.Maximum = Convert.ToDouble(yMax);
 
-            // Set large change maximums
+             // Set large change maximums
             ScreenXOffset.LargeChange = screenWidth / 10;
             ScreenYOffset.LargeChange = screenHeight / 10;
             TouchpadXOffset.LargeChange = touchpadWidth / 10;
@@ -173,6 +194,58 @@ namespace absolutetouch_gui
             DisableOnExit.IsChecked = false;
 
             UpdateUseableOptions();
+            return;
+        }
+
+        private void GetTouchpadProperties()
+        {
+            try
+            {
+                api.Initialize();
+                api.Activate();
+                // select first device found
+                deviceHandle = api.FindDevice(SYNCTRLLib.SynConnectionType.SE_ConnectionAny, SYNCTRLLib.SynDeviceType.SE_DeviceTouchPad, -1);
+                device.Select(deviceHandle);
+                device.Activate();
+
+                xMin = int.Parse((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_XLoSensor).ToString()));
+                xMax = int.Parse((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_XHiSensor).ToString()));
+                yMin = int.Parse((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_YLoSensor).ToString()));
+                yMax = int.Parse((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_YHiSensor).ToString()));
+                xDPI = ((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_XDPI)));
+                yDPI = ((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_YDPI)));
+
+                api.Deactivate();
+            }
+            catch(System.NullReferenceException)
+            {
+                System.Windows.Forms.MessageBox.Show("Touchpad settings were unable to load", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // use default estimated values
+                xMin = 0;
+                xMax = 6143;
+                yMin = 0;
+                yMax = 6143;
+                xDPI = 0;
+                yDPI = 0;
+                return;
+            }
+            return;
+        }
+
+        public void SynapticsAPI_detect()
+        {
+            try
+            {
+                api = new SYNCTRLLib.SynAPICtrl();
+                device = new SYNCTRLLib.SynDeviceCtrl();
+                SYNCTRLLib.SynPacketCtrl packet = new SYNCTRLLib.SynPacketCtrl();
+            }
+            catch (System.Runtime.InteropServices.COMException)
+            {
+                //System.Windows.Forms.MessageBox.Show("Fatal error: Synaptics drivers not installed or Synaptics Touchpad is missing.", "Fatal Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //Close();
+                return; // ignores error and opens GUI anyway, using default values
+            }
             return;
         }
 
@@ -317,7 +390,6 @@ namespace absolutetouch_gui
             openFile.ShowDialog();
 
             settingsLocation = openFile.FileName;
-            return;
         }
 
         public void SaveSettings()
