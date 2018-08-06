@@ -23,6 +23,7 @@ There are probably plenty of bugs to be found and to be fixed, and probably some
 * Saving & loading default settings from root folder
 * Keyboard shortcuts
 	* Ctrl+R for quick start of AbsoluteTouch
+* Automatic detection of touchpad maximum coordinates
 
 # Known issues / incomplete stuff
 
