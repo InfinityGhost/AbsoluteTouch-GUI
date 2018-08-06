@@ -23,16 +23,10 @@ There are probably plenty of bugs to be found and to be fixed, and probably some
 * Saving settings to a file
 * Loading settings from a file
 * Saving & loading default settings from root folder
-<<<<<<< HEAD
 
 # Keyboard shortcuts
 
 * Ctrl+R for quick start of AbsoluteTouch
-=======
-* Keyboard shortcuts
-	* Ctrl+R for quick start of AbsoluteTouch
-* Automatic detection of touchpad maximum coordinates
->>>>>>> fbea6ecf50150f908563ed4a289a5b5d1c5a8a02
 
 # Known issues / incomplete stuff
 
