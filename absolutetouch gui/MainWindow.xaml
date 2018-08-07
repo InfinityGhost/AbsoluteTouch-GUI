@@ -75,8 +75,8 @@
                             </GroupBox>
                             <CheckBox x:Name="UseOffset" Content="Use offset (in offset tab)" HorizontalAlignment="Left" Height="16" Margin="20,192,0,0" VerticalAlignment="Top" Click="UseOffset_Clicked"/>
                             <CheckBox x:Name="LockAspectRatio" Content="Lock aspect ratio" HorizontalAlignment="Left" Height="16" Margin="20,213,0,0" VerticalAlignment="Top" Click="LockAspectRatio_Click"/>
-                            <CheckBox x:Name="EnableClick" Content="Enable click (Github dev build only)" HorizontalAlignment="Left" Height="16" Margin="196,192,0,0" VerticalAlignment="Top" Click="EnableClick_Clicked"/>
-                            <CheckBox x:Name="DisableOnExit" Content="Disable touchpad on exit" HorizontalAlignment="Left" Height="16" Margin="196,213,0,0" VerticalAlignment="Top" Click="DisableOnExit_Click"/>
+                            <CheckBox x:Name="EnableClick" Content="Enable click (Github dev build only)" HorizontalAlignment="Left" Height="16" Margin="196,192,0,0" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="DisableOnExit" Content="Disable touchpad on exit" HorizontalAlignment="Left" Height="16" Margin="196,213,0,0" VerticalAlignment="Top"/>
                         </Grid>
                     </GroupBox>
                     <Button x:Name="RunButton" Content="Run" Click="RunButton_Click" HorizontalAlignment="Center" Width="74" Height="30" VerticalAlignment="Bottom" Command="{StaticResource RunProgram}" Margin="0,0,0,10"/>

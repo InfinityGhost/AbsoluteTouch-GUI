@@ -554,16 +554,6 @@ namespace absolutetouch_gui
             }
         }
 
-        private void EnableClick_Clicked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void DisableOnExit_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         // Offset Values
 
         private void ScreenXOffset_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
