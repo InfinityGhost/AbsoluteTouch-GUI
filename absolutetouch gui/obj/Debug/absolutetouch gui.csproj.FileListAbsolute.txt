@@ -29,5 +29,4 @@ C:\Users\Christian\OneDrive\Code\source\repos\absolutetouch gui\absolutetouch gu
 C:\Users\Christian\OneDrive\Code\source\repos\absolutetouch gui\absolutetouch gui\obj\Debug\absolutetouch gui.csproj.CoreCompileInputs.cache
 C:\Users\Christian\OneDrive\Code\source\repos\absolutetouch gui\absolutetouch gui\obj\Debug\absolutetouch gui.exe
 C:\Users\Christian\OneDrive\Code\source\repos\absolutetouch gui\absolutetouch gui\obj\Debug\absolutetouch gui.pdb
-C:\Users\Christian\source\repos\absolutetouch gui\absolutetouch gui\bin\Debug\absolutetouch gui.exe.CodeAnalysisLog.xml
-C:\Users\Christian\source\repos\absolutetouch gui\absolutetouch gui\bin\Debug\absolutetouch gui.exe.lastcodeanalysissucceeded
+C:\Users\Christian\source\repos\absolutetouch gui\absolutetouch gui\obj\Debug\absolutetouch gui.csprojAssemblyReference.cache

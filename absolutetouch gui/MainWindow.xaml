@@ -5,20 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:absolutetouch_gui"
         mc:Ignorable="d"
-        Title="AbsoluteTouch GUI" Height="400" Width="600" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
+        Title="AbsoluteTouch GUI" Height="418" Width="600" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
+
+    <!--Start of Keyboard Commands-->
+    
     <Window.Resources>
         <RoutedCommand x:Key="RunProgram"/>
+        <RoutedCommand x:Key="SaveShortcut"/>
     </Window.Resources>
 
     <Window.CommandBindings>
         <CommandBinding Command="{StaticResource RunProgram}" Executed="RunShortcut"/>
+        <CommandBinding Command="{StaticResource SaveShortcut}" Executed="SaveShortcut"/>
     </Window.CommandBindings>
 
     <Window.InputBindings>
         <KeyBinding Key="R" Modifiers="Ctrl" Command="{StaticResource RunProgram}"/>
+        <KeyBinding Key="S" Modifiers="Ctrl" Command="{StaticResource SaveShortcut}"/>
     </Window.InputBindings>
+    
+    <!--Start of UI-->
+    
     <Grid>
-        <Menu Height="24" VerticalAlignment="Top">
+        <Menu Height="24" VerticalAlignment="Top" Background="White">
             <MenuItem Header="File" Height="24" Margin="10,0,0,0">
                 <MenuItem x:Name="AboutButton" Header="About" Click="AboutButton_Click"/>
                 <MenuItem x:Name="LoadSettingsButton" Header="Load settings" Click="LoadSettingsButton_Click"/>
@@ -33,7 +42,7 @@
             </MenuItem>
             <MenuItem x:Name="RunMenuButton" Header="Run" Click="RunButton_Click" InputGestureText="Ctrl+R"/>
         </Menu>
-        <TabControl Margin="0,25,0,0">
+        <TabControl Margin="0,25,0,18">
             <TabItem x:Name="InputSettingsTab" Header="Input Settings">
                 <Grid>
                     <GroupBox Header="Settings" Margin="0,0,0,50">
@@ -80,7 +89,6 @@
                         </Grid>
                     </GroupBox>
                     <Button x:Name="RunButton" Content="Run" Click="RunButton_Click" HorizontalAlignment="Center" Width="74" Height="30" VerticalAlignment="Bottom" Command="{StaticResource RunProgram}" Margin="0,0,0,10"/>
-                    <!--<Button x:Name="TouchpadAspectRatioUpdate" Content="Aspect Ratio Update" Margin="383,273,0,0" HorizontalAlignment="Left" Width="120" Height="30" VerticalAlignment="Top" Click="TouchpadAspectRatioUpdate_Click"/>-->
                 </Grid>
             </TabItem>
             <TabItem x:Name="OffsetTab" Header="Offset">
@@ -132,5 +140,8 @@
                 </Grid>
             </TabItem>
         </TabControl>
+        <StatusBar VerticalAlignment="Bottom" Height="18" Background="White" HorizontalAlignment="Left">
+            <TextBlock x:Name="StatusbarText" Height="18" Margin="0,-3"/>
+        </StatusBar>
     </Grid>
 </Window>

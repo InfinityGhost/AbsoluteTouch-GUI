@@ -67,11 +67,20 @@ namespace absolutetouch_gui
         int xDPI;
         int yDPI;
 
+        bool APIAvailable;
+
         #endregion
 
         #region Keyboard Shortcuts
 
         public void RunShortcut(Object sender, ExecutedRoutedEventArgs e) => RunAbsoluteTouch();
+
+        public void SaveShortcut(Object sender, ExecutedRoutedEventArgs e)
+        {
+            SaveSettingsDialog();
+            SaveSettings();
+            return;
+        }
 
         #endregion
 
@@ -113,7 +122,7 @@ namespace absolutetouch_gui
         {
             try
             {
-                // get offsets and put into arguments
+                // Get offsets and put into arguments
                 double touchpadX1Offset = double.Parse(touchpadX1.Text) + TouchpadXOffset.Value;
                 double touchpadY1Offset = double.Parse(touchpadY1.Text) + TouchpadYOffset.Value;
                 double touchpadX2Offset = double.Parse(touchpadX2.Text) + TouchpadXOffset.Value;
@@ -197,43 +206,9 @@ namespace absolutetouch_gui
             return;
         }
 
-        private void GetTouchpadProperties()
-        {
-            try
-            {
-                api.Initialize();
-                api.Activate();
-                // select first device found
-                deviceHandle = api.FindDevice(SYNCTRLLib.SynConnectionType.SE_ConnectionAny, SYNCTRLLib.SynDeviceType.SE_DeviceTouchPad, -1);
-                device.Select(deviceHandle);
-                device.Activate();
-
-                xMin = int.Parse((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_XLoSensor).ToString()));
-                xMax = int.Parse((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_XHiSensor).ToString()));
-                yMin = int.Parse((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_YLoSensor).ToString()));
-                yMax = int.Parse((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_YHiSensor).ToString()));
-                xDPI = ((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_XDPI)));
-                yDPI = ((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_YDPI)));
-
-                api.Deactivate();
-            }
-            catch(System.NullReferenceException)
-            {
-                System.Windows.Forms.MessageBox.Show("Touchpad settings were unable to load", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                // use default estimated values
-                xMin = 0;
-                xMax = 6143;
-                yMin = 0;
-                yMax = 6143;
-                xDPI = 0;
-                yDPI = 0;
-                return;
-            }
-            return;
-        }
-
         public void SynapticsAPI_detect()
         {
+            // Attempt to use Synaptics API
             try
             {
                 api = new SYNCTRLLib.SynAPICtrl();
@@ -242,10 +217,59 @@ namespace absolutetouch_gui
             }
             catch (System.Runtime.InteropServices.COMException)
             {
-                //System.Windows.Forms.MessageBox.Show("Fatal error: Synaptics drivers not installed or Synaptics Touchpad is missing.", "Fatal Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //Close();
-                return; // ignores error and opens GUI anyway, using default values
+                APIAvailable = false;
+                return; // ignores error and opens GUI anyway, using only default values
             }
+            APIAvailable = true;
+            return;
+        }
+
+        private void GetTouchpadProperties()
+        {
+            if (APIAvailable == true)
+            {
+                try
+                {
+                    api.Initialize();
+                    api.Activate();
+                    // Select first device found
+                    deviceHandle = api.FindDevice(SYNCTRLLib.SynConnectionType.SE_ConnectionAny, SYNCTRLLib.SynDeviceType.SE_DeviceTouchPad, -1);
+                    device.Select(deviceHandle);
+                    device.Activate();
+
+                    xMin = int.Parse((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_XLoSensor).ToString()));
+                    xMax = int.Parse((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_XHiSensor).ToString()));
+                    yMin = int.Parse((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_YLoSensor).ToString()));
+                    yMax = int.Parse((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_YHiSensor).ToString()));
+                    xDPI = ((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_XDPI)));
+                    yDPI = ((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_YDPI)));
+
+                    api.Deactivate();
+                    StatusbarText.Text = "Ready.";
+                }
+                catch (System.NullReferenceException)
+                {
+                    StatusbarText.Text = "Error while finding synaptics touchpad properties.";
+                    DefaultTouchpadValues(); // use default estimated values
+                    return;
+                }
+            }
+            else if (APIAvailable == false) 
+            {
+                DefaultTouchpadValues();
+                StatusbarText.Text = "Warning: Synaptics touchpad drivers are missing. Using default values.";
+            }
+            return;
+        }
+
+        private void DefaultTouchpadValues()
+        {
+            xMin = 0;
+            xMax = 6143;
+            yMin = 0;
+            yMax = 6143;
+            xDPI = 0;
+            yDPI = 0;
             return;
         }
 
@@ -458,6 +482,14 @@ namespace absolutetouch_gui
             if (File.Exists(Directory.GetCurrentDirectory() + @"\AbsoluteTouchDefault.setup") == true)
             {
                 settingsLocation = Directory.GetCurrentDirectory() + @"\AbsoluteTouchDefault.setup";
+                if (APIAvailable == false)
+                {
+                    StatusbarText.Text = "Warning: Synaptics touchpad drivers are missing. Default settings loaded.";
+                }
+                else if (APIAvailable == true)
+                {
+                    StatusbarText.Text = StatusbarText.Text + " Default settings loaded.";
+                }
                 LoadSettings();
             }
         }
@@ -516,8 +548,6 @@ namespace absolutetouch_gui
         }
 
         private void GetResolution_Click(object sender, RoutedEventArgs e) => Defaults();
-
-        private void TouchpadAspectRatioUpdate_Click(object sender, RoutedEventArgs e) => TouchpadAspectRatio();
 
         private void UseOffset_Clicked(object sender, RoutedEventArgs e)
         {
