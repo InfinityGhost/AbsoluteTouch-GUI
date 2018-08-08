@@ -29,8 +29,6 @@ namespace absolutetouch_gui
 
             InitializeComponent();
 
-            SynapticsAPI_detect();
-
             Defaults();
 
             DefaultSettingsCheck();
@@ -67,7 +65,33 @@ namespace absolutetouch_gui
         int xDPI;
         int yDPI;
 
-        bool APIAvailable;
+        public bool APIAvailable
+        {
+            get
+            {
+                // Attempt to use Synaptics API
+                try
+                {
+                    api = new SYNCTRLLib.SynAPICtrl();
+                    device = new SYNCTRLLib.SynDeviceCtrl();
+                    SYNCTRLLib.SynPacketCtrl packet = new SYNCTRLLib.SynPacketCtrl();
+                }
+                catch (System.Runtime.InteropServices.COMException)
+                {
+                    return false; // Ignores error and opens GUI anyway
+                }
+                catch (Exception ex)
+                {
+                    StatusbarText.Text = $"{ex}";
+                    return false; // This usually shouldn't happen but its a precaution just in case.
+                }
+                return true;
+            }
+            set
+            {
+                // There should be no way to set this variable, only get.
+            }
+        }
 
         #endregion
 
@@ -203,24 +227,6 @@ namespace absolutetouch_gui
             DisableOnExit.IsChecked = false;
 
             UpdateUseableOptions();
-            return;
-        }
-
-        public void SynapticsAPI_detect()
-        {
-            // Attempt to use Synaptics API
-            try
-            {
-                api = new SYNCTRLLib.SynAPICtrl();
-                device = new SYNCTRLLib.SynDeviceCtrl();
-                SYNCTRLLib.SynPacketCtrl packet = new SYNCTRLLib.SynPacketCtrl();
-            }
-            catch (System.Runtime.InteropServices.COMException)
-            {
-                APIAvailable = false;
-                return; // ignores error and opens GUI anyway, using only default values
-            }
-            APIAvailable = true;
             return;
         }
 
