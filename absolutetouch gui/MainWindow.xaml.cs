@@ -38,12 +38,6 @@ namespace absolutetouch_gui
 
         #region Public Variables
 
-        public string touchpadRegion;
-        public string screenRegion;
-        public bool touchpadDisable;
-        public decimal weight;
-        public bool touchDebug;
-        public string programArguments;
         public System.Diagnostics.Process absoluteTouchProcess;
         public string settingsLocation;
         // resolutions
@@ -165,6 +159,7 @@ namespace absolutetouch_gui
 
         private void CollectInformation()
         {
+            string programArguments;
             try
             {
                 // Get offsets and put into arguments
@@ -176,6 +171,8 @@ namespace absolutetouch_gui
                 double screenY1Offset = double.Parse(screenY1.Text) + ScreenYOffset.Value;
                 double screenX2Offset = double.Parse(screenX2.Text) + ScreenXOffset.Value;
                 double screenY2Offset = double.Parse(screenY2.Text) + ScreenYOffset.Value;
+                double weight = WeightSlider.Value;
+
                 // get toggle arguments
                 string otherArguments = String.Empty;
                 if (EnableClick.IsChecked == true)
@@ -203,11 +200,17 @@ namespace absolutetouch_gui
 
         private void Defaults()
         {
+            // Reset checkboxes
+            UseOffset.IsChecked = false;
+            LockAspectRatio.IsChecked = false;
+            EnableClick.IsChecked = false;
+            DisableOnExit.IsChecked = false;
+
             // Update Textboxes
             screenX1.Text = "0";
             screenY1.Text = "0";
-            screenX2.Text = $"{screenWidth}";
-            screenY2.Text = $"{screenHeight}";
+            screenX2.Text = $"{Screen.PrimaryScreen.Bounds.Width}";
+            screenY2.Text = $"{Screen.PrimaryScreen.Bounds.Height}";
 
             touchpadX1.Text = "0";
             touchpadY1.Text = "0";
@@ -224,8 +227,8 @@ namespace absolutetouch_gui
             GetTouchpadProperties();
 
             // Set max offsets
-            ScreenXOffset.Maximum = screenWidth;
-            ScreenYOffset.Maximum = screenHeight;
+            ScreenXOffset.Maximum = Screen.PrimaryScreen.Bounds.Width;
+            ScreenYOffset.Maximum = Screen.PrimaryScreen.Bounds.Height;
             TouchpadXOffset.Maximum = Convert.ToDouble(xMax);
             TouchpadYOffset.Maximum = Convert.ToDouble(yMax);
 
@@ -234,18 +237,6 @@ namespace absolutetouch_gui
             ScreenYOffset.LargeChange = screenHeight / 10;
             TouchpadXOffset.LargeChange = touchpadWidth / 10;
             TouchpadYOffset.LargeChange = touchpadHeight / 10;
-
-            // Automatically adjust to Aspect Ratio
-            if (LockAspectRatio.IsChecked == true)
-            {
-                TouchpadAspectRatio();
-            }
-
-            // Reset checkboxes
-            UseOffset.IsChecked = false;
-            LockAspectRatio.IsChecked = false;
-            EnableClick.IsChecked = false;
-            DisableOnExit.IsChecked = false;
 
             UpdateUseableOptions();
             return;
@@ -379,10 +370,11 @@ namespace absolutetouch_gui
             touchpadY2.Text = $"{AspectRatioCalc}";
         }
 
+        // Loading & Saving setup files
+
         public void LoadSettings()
         {
             // Begin loading settings from text file
-
             try
             {
                 //  -- Note --
@@ -445,6 +437,7 @@ namespace absolutetouch_gui
 
         public void SaveSettings()
         {
+            // Begin saving settings to text file
             try
             {
                 File.WriteAllText(settingsLocation, String.Empty);
