@@ -38,7 +38,6 @@ namespace absolutetouch_gui
 
         #region Public Variables
 
-        public string installLocation;
         public string touchpadRegion;
         public string screenRegion;
         public bool touchpadDisable;
@@ -54,7 +53,6 @@ namespace absolutetouch_gui
         public double touchpadHeight;
 
         // Synaptics API variables
-        
         SYNCTRLLib.SynAPICtrl api;
         SYNCTRLLib.SynDeviceCtrl device;
         int deviceHandle;
@@ -64,6 +62,8 @@ namespace absolutetouch_gui
         int yMax;
         int xDPI;
         int yDPI;
+
+        // setters / getters
 
         public bool APIAvailable
         {
@@ -90,6 +90,27 @@ namespace absolutetouch_gui
             set
             {
                 // There should be no way to set this variable, only get.
+            }
+        }
+
+        private string _InstallLocation;
+        public string InstallLocation
+        {
+            get
+            {
+                if (InstallLocation == null)
+                {
+                    _InstallLocation = FindInstallLocation();
+                    return _InstallLocation;
+                }
+                else
+                {
+                    return _InstallLocation;
+                }
+            }
+            set
+            {
+                _InstallLocation = value;
             }
         }
 
@@ -169,7 +190,7 @@ namespace absolutetouch_gui
                 programArguments = $"-s {screenX1Offset},{screenY1Offset},{screenX2Offset},{screenY2Offset} -t {touchpadX1Offset},{touchpadY1Offset},{touchpadX2Offset},{touchpadY2Offset} -w {weight} {otherArguments}";
                 // set info
                 absoluteTouchProcess = new System.Diagnostics.Process();
-                absoluteTouchProcess.StartInfo.FileName = installLocation;
+                absoluteTouchProcess.StartInfo.FileName = InstallLocation;
                 absoluteTouchProcess.StartInfo.Arguments = programArguments;
             }
             catch (System.FormatException)
@@ -322,26 +343,26 @@ namespace absolutetouch_gui
             return;
         }
 
-        private void FindInstallLocation()
+        private string FindInstallLocation()
         {
-            OpenFileDialog FInstallLocation = new OpenFileDialog
+            OpenFileDialog location = new OpenFileDialog
             {
                 InitialDirectory = "C:\\",
                 Filter = "Executible Files (*.exe)|*.exe|All files (*.*)|*.*",
                 RestoreDirectory = true
             };
-            FInstallLocation.ShowDialog();
+            location.ShowDialog();
 
             try
             {
-                InstallLocationTextbox.Text = FInstallLocation.FileName;
+                InstallLocationTextbox.Text = location.FileName;
             }
-            catch(ArgumentNullException)
+            catch (ArgumentNullException)
             {
                 InstallLocationTextbox.Text = String.Empty;
                 FindInstallLocation();
             }
-            return;
+            return location.FileName;
         }
 
         private void TouchpadAspectRatio()
@@ -509,11 +530,11 @@ namespace absolutetouch_gui
             // Update install location variable
             try
             {
-                installLocation = InstallLocationTextbox.Text;
+                InstallLocation = InstallLocationTextbox.Text;
             }
             catch
             {
-                installLocation = "C:\\";
+                InstallLocation = "C:\\";
                 return;
             }
             return;
@@ -521,7 +542,7 @@ namespace absolutetouch_gui
 
         private void ExitButton_Click(object sender, RoutedEventArgs e) => Close();
 
-        private void FindInstallLocationButton_Click(object sender, RoutedEventArgs e) => FindInstallLocation();
+        private void FindInstallLocationButton_Click(object sender, RoutedEventArgs e) => InstallLocation = FindInstallLocation();
 
         private void UpdateArgumentsButton_Click(object sender, RoutedEventArgs e) => CollectInformation();
 
