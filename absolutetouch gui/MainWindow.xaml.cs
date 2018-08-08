@@ -498,8 +498,6 @@ namespace absolutetouch_gui
 
         #region  Button Methods
 
-        private void RunButton_Click(object sender, RoutedEventArgs e) => RunAbsoluteTouch();
-
         private void InstallLocationTextbox_TextChanged(object sender, TextChangedEventArgs e)
         {
             // Update install location variable

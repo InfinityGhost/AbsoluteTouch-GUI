@@ -40,7 +40,7 @@
                 <MenuItem x:Name="GetResolution" Header="Reset to default" Click="GetResolution_Click"/>
                 <MenuItem x:Name="UpdateArgumentsButton" Header="Force arguments update" Click="UpdateArgumentsButton_Click"/>
             </MenuItem>
-            <MenuItem x:Name="RunMenuButton" Header="Run" Click="RunButton_Click" InputGestureText="Ctrl+R"/>
+            <MenuItem x:Name="RunMenuButton" Header="Run" Command="{StaticResource RunProgram}" InputGestureText="Ctrl+R"/>
         </Menu>
         <TabControl Margin="0,25,0,18">
             <TabItem x:Name="InputSettingsTab" Header="Input Settings">
@@ -88,7 +88,7 @@
                             <CheckBox x:Name="DisableOnExit" Content="Disable touchpad on exit" HorizontalAlignment="Left" Height="16" Margin="196,213,0,0" VerticalAlignment="Top"/>
                         </Grid>
                     </GroupBox>
-                    <Button x:Name="RunButton" Content="Run" Click="RunButton_Click" HorizontalAlignment="Center" Width="74" Height="30" VerticalAlignment="Bottom" Command="{StaticResource RunProgram}" Margin="0,0,0,10"/>
+                    <Button x:Name="RunButton" Content="Run" HorizontalAlignment="Center" Width="74" Height="30" VerticalAlignment="Bottom" Command="{StaticResource RunProgram}" Margin="0,0,0,10"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="OffsetTab" Header="Offset">

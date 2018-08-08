@@ -53,15 +53,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Interop.SYNCOMLib">
-      <HintPath>F:\OneDrive\Interop.SYNCOMLib.dll</HintPath>
+      <HintPath>..\..\..\..\..\Interop.SYNCOMLib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Interop.SYNCTRLLib">
-      <HintPath>F:\OneDrive\Interop.SYNCTRLLib.dll</HintPath>
+      <HintPath>..\..\..\..\..\Interop.SYNCTRLLib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Interop.SynTPEnhLib">
-      <HintPath>F:\OneDrive\Interop.SynTPEnhLib.dll</HintPath>
+      <HintPath>..\..\..\..\..\Interop.SynTPEnhLib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
