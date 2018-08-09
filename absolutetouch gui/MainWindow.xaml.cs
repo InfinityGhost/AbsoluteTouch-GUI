@@ -342,18 +342,21 @@ namespace absolutetouch_gui
                 Filter = "Executible Files (*.exe)|*.exe|All files (*.*)|*.*",
                 RestoreDirectory = true
             };
-            location.ShowDialog();
-
-            try
+            
+            if (location.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                InstallLocationTextbox.Text = location.FileName;
+                try
+                {
+                    InstallLocationTextbox.Text = location.FileName;
+                }
+                catch (ArgumentNullException)
+                {
+                    InstallLocationTextbox.Text = String.Empty;
+                    FindInstallLocation();
+                }
+                return location.FileName;
             }
-            catch (ArgumentNullException)
-            {
-                InstallLocationTextbox.Text = String.Empty;
-                FindInstallLocation();
-            }
-            return location.FileName;
+            return InstallLocationTextbox.Text; 
         }
 
         private void TouchpadAspectRatio()
