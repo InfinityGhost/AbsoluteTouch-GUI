@@ -41,8 +41,6 @@ namespace absolutetouch_gui
         public System.Diagnostics.Process absoluteTouchProcess;
         public string settingsLocation;
         // resolutions
-        public double screenWidth = Screen.PrimaryScreen.Bounds.Width;
-        public double screenHeight = Screen.PrimaryScreen.Bounds.Height;
         public double touchpadWidth;
         public double touchpadHeight;
 
@@ -92,7 +90,7 @@ namespace absolutetouch_gui
         {
             get
             {
-                if (InstallLocation == null)
+                if (_InstallLocation == null)
                 {
                     _InstallLocation = FindInstallLocation();
                     return _InstallLocation;
@@ -232,9 +230,15 @@ namespace absolutetouch_gui
             TouchpadXOffset.Maximum = Convert.ToDouble(xMax);
             TouchpadYOffset.Maximum = Convert.ToDouble(yMax);
 
-             // Set large change maximums
-            ScreenXOffset.LargeChange = screenWidth / 10;
-            ScreenYOffset.LargeChange = screenHeight / 10;
+            // Set min offsets
+            ScreenXOffset.Minimum = 0 - Screen.PrimaryScreen.Bounds.Width;
+            ScreenYOffset.Minimum = 0 - Screen.PrimaryScreen.Bounds.Height;
+            TouchpadXOffset.Minimum = 0 - Convert.ToDouble(xMax);
+            TouchpadYOffset.Minimum = 0 - Convert.ToDouble(yMax);
+
+            // Set large change maximums
+            ScreenXOffset.LargeChange = Screen.PrimaryScreen.Bounds.Width / 10;
+            ScreenYOffset.LargeChange = Screen.PrimaryScreen.Bounds.Height / 10;
             TouchpadXOffset.LargeChange = touchpadWidth / 10;
             TouchpadYOffset.LargeChange = touchpadHeight / 10;
 
@@ -378,49 +382,55 @@ namespace absolutetouch_gui
         public void LoadSettings()
         {
             // Begin loading settings from text file
-            try
-            {
-                //  -- Note --
-                //  This code could probably be cleaned up / improved, possibly StreamReader?
-                
-                // Input settings tab
-                // Screen bounds
-                screenX1.Text = File.ReadLines(settingsLocation).Take(1).First();
-                screenY1.Text = File.ReadLines(settingsLocation).Skip(1).Take(1).First();
-                screenX2.Text = File.ReadLines(settingsLocation).Skip(2).Take(1).First();
-                screenY2.Text = File.ReadLines(settingsLocation).Skip(3).Take(1).First();
-                // Touchpad bounds
-                touchpadX1.Text = File.ReadLines(settingsLocation).Skip(4).Take(1).First();
-                touchpadY1.Text = File.ReadLines(settingsLocation).Skip(5).Take(1).First();
-                touchpadX2.Text = File.ReadLines(settingsLocation).Skip(6).Take(1).First();
-                touchpadY2.Text = File.ReadLines(settingsLocation).Skip(7).Take(1).First();
-                // Sliders
-                WeightSlider.Value = double.Parse(File.ReadLines(settingsLocation).Skip(8).Take(1).First());
-                // Checkboxes
-                UseOffset.IsChecked = bool.Parse(File.ReadLines(settingsLocation).Skip(9).Take(1).First());
-                LockAspectRatio.IsChecked = bool.Parse(File.ReadLines(settingsLocation).Skip(10).Take(1).First());
-                EnableClick.IsChecked = bool.Parse(File.ReadLines(settingsLocation).Skip(11).Take(1).First());
-                DisableOnExit.IsChecked = bool.Parse(File.ReadLines(settingsLocation).Skip(12).Take(1).First());
-                // Offset tab
-                // Sliders
-                ScreenXOffset.Value = double.Parse(File.ReadLines(settingsLocation).Skip(13).Take(1).First());
-                ScreenYOffset.Value = double.Parse(File.ReadLines(settingsLocation).Skip(14).Take(1).First());
-                TouchpadXOffset.Value = double.Parse(File.ReadLines(settingsLocation).Skip(15).Take(1).First());
-                TouchpadYOffset.Value = double.Parse(File.ReadLines(settingsLocation).Skip(16).Take(1).First());
-                // Setup tab
-                // Textboxes
-                InstallLocationTextbox.Text = File.ReadLines(settingsLocation).Skip(17).Take(1).First();
-            }
-            catch (System.ArgumentException)
+            if (settingsLocation == null)
             {
                 return;
             }
-            catch
+            else
             {
-                System.Windows.Forms.MessageBox.Show("An error has occured while loading.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+                try
+                {
+                    //  -- Note --
+                    //  This code could probably be cleaned up / improved, possibly StreamReader?
 
+                    // Input settings tab
+                    // Screen bounds
+                    screenX1.Text = File.ReadLines(settingsLocation).Take(1).First();
+                    screenY1.Text = File.ReadLines(settingsLocation).Skip(1).Take(1).First();
+                    screenX2.Text = File.ReadLines(settingsLocation).Skip(2).Take(1).First();
+                    screenY2.Text = File.ReadLines(settingsLocation).Skip(3).Take(1).First();
+                    // Touchpad bounds
+                    touchpadX1.Text = File.ReadLines(settingsLocation).Skip(4).Take(1).First();
+                    touchpadY1.Text = File.ReadLines(settingsLocation).Skip(5).Take(1).First();
+                    touchpadX2.Text = File.ReadLines(settingsLocation).Skip(6).Take(1).First();
+                    touchpadY2.Text = File.ReadLines(settingsLocation).Skip(7).Take(1).First();
+                    // Sliders
+                    WeightSlider.Value = double.Parse(File.ReadLines(settingsLocation).Skip(8).Take(1).First());
+                    // Checkboxes
+                    UseOffset.IsChecked = bool.Parse(File.ReadLines(settingsLocation).Skip(9).Take(1).First());
+                    LockAspectRatio.IsChecked = bool.Parse(File.ReadLines(settingsLocation).Skip(10).Take(1).First());
+                    EnableClick.IsChecked = bool.Parse(File.ReadLines(settingsLocation).Skip(11).Take(1).First());
+                    DisableOnExit.IsChecked = bool.Parse(File.ReadLines(settingsLocation).Skip(12).Take(1).First());
+                    // Offset tab
+                    // Sliders
+                    ScreenXOffset.Value = double.Parse(File.ReadLines(settingsLocation).Skip(13).Take(1).First());
+                    ScreenYOffset.Value = double.Parse(File.ReadLines(settingsLocation).Skip(14).Take(1).First());
+                    TouchpadXOffset.Value = double.Parse(File.ReadLines(settingsLocation).Skip(15).Take(1).First());
+                    TouchpadYOffset.Value = double.Parse(File.ReadLines(settingsLocation).Skip(16).Take(1).First());
+                    // Setup tab
+                    // Textboxes
+                    InstallLocationTextbox.Text = File.ReadLines(settingsLocation).Skip(17).Take(1).First();
+                }
+                catch (System.ArgumentException)
+                {
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.Forms.MessageBox.Show($"An error has occured while loading. {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
             UpdateUseableOptions();
             return;
         }
@@ -433,56 +443,68 @@ namespace absolutetouch_gui
                 Filter = "AbsoluteTouch GUI setup (*.setup)|*.setup|All files (*.*)|*.*",
                 RestoreDirectory = true,
             };
-            openFile.ShowDialog();
-
-            settingsLocation = openFile.FileName;
+            if (openFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                settingsLocation = openFile.FileName;
+            }
+            else
+            {
+                settingsLocation = null;
+            }
         }
 
         public void SaveSettings()
         {
             // Begin saving settings to text file
-            try
-            {
-                File.WriteAllText(settingsLocation, String.Empty);
-                StreamWriter saveSettings = File.AppendText(settingsLocation);
-                // Input settings tab
-                // Screen bounds
-                saveSettings.WriteLine(screenX1.Text);
-                saveSettings.WriteLine(screenY1.Text);
-                saveSettings.WriteLine(screenX2.Text);
-                saveSettings.WriteLine(screenY2.Text);
-                // Touchpad bounds
-                saveSettings.WriteLine(touchpadX1.Text);
-                saveSettings.WriteLine(touchpadY1.Text);
-                saveSettings.WriteLine(touchpadX2.Text);
-                saveSettings.WriteLine(touchpadY2.Text);
-                // Sliders
-                saveSettings.WriteLine(WeightSlider.Value.ToString());
-                // Checkboxes
-                saveSettings.WriteLine(UseOffset.IsChecked.ToString());
-                saveSettings.WriteLine(LockAspectRatio.IsChecked.ToString());
-                saveSettings.WriteLine(EnableClick.IsChecked.ToString());
-                saveSettings.WriteLine(DisableOnExit.IsChecked.ToString());
-                // Offset tab
-                // Sliders
-                saveSettings.WriteLine(ScreenXOffset.Value.ToString());
-                saveSettings.WriteLine(ScreenYOffset.Value.ToString());
-                saveSettings.WriteLine(TouchpadXOffset.Value.ToString());
-                saveSettings.WriteLine(TouchpadYOffset.Value.ToString());
-                // Setup tab
-                // Textboxes
-                saveSettings.WriteLine(InstallLocationTextbox.Text);
-                saveSettings.Close();
-            }
-            catch (System.ArgumentException)
+            if (settingsLocation == null)
             {
                 return;
             }
-            catch
+            else
             {
-                System.Windows.Forms.MessageBox.Show("An error has occured while saving.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                try
+                {
+                    File.WriteAllText(settingsLocation, String.Empty);
+                    StreamWriter saveSettings = File.AppendText(settingsLocation);
+                    // Input settings tab
+                    // Screen bounds
+                    saveSettings.WriteLine(screenX1.Text);
+                    saveSettings.WriteLine(screenY1.Text);
+                    saveSettings.WriteLine(screenX2.Text);
+                    saveSettings.WriteLine(screenY2.Text);
+                    // Touchpad bounds
+                    saveSettings.WriteLine(touchpadX1.Text);
+                    saveSettings.WriteLine(touchpadY1.Text);
+                    saveSettings.WriteLine(touchpadX2.Text);
+                    saveSettings.WriteLine(touchpadY2.Text);
+                    // Sliders
+                    saveSettings.WriteLine(WeightSlider.Value.ToString());
+                    // Checkboxes
+                    saveSettings.WriteLine(UseOffset.IsChecked.ToString());
+                    saveSettings.WriteLine(LockAspectRatio.IsChecked.ToString());
+                    saveSettings.WriteLine(EnableClick.IsChecked.ToString());
+                    saveSettings.WriteLine(DisableOnExit.IsChecked.ToString());
+                    // Offset tab
+                    // Sliders
+                    saveSettings.WriteLine(ScreenXOffset.Value.ToString());
+                    saveSettings.WriteLine(ScreenYOffset.Value.ToString());
+                    saveSettings.WriteLine(TouchpadXOffset.Value.ToString());
+                    saveSettings.WriteLine(TouchpadYOffset.Value.ToString());
+                    // Setup tab
+                    // Textboxes
+                    saveSettings.WriteLine(InstallLocationTextbox.Text);
+                    saveSettings.Close();
+                }
+                catch (System.ArgumentException)
+                {
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.Forms.MessageBox.Show($"An error has occured while saving. {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                return;
             }
-            return;
         }
         
         private void SaveSettingsDialog()
@@ -494,9 +516,14 @@ namespace absolutetouch_gui
                 RestoreDirectory = true,
                 DefaultExt = "setup",
             };
-            openFile.ShowDialog();
-
-            settingsLocation = openFile.FileName;
+            if (openFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                settingsLocation = openFile.FileName;
+            }
+            else
+            {
+                settingsLocation = null;
+            }
             return;
         }
 
