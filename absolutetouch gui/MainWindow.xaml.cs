@@ -230,12 +230,6 @@ namespace absolutetouch_gui
             TouchpadXOffset.Maximum = Convert.ToDouble(xMax);
             TouchpadYOffset.Maximum = Convert.ToDouble(yMax);
 
-            // Set min offsets
-            ScreenXOffset.Minimum = 0 - Screen.PrimaryScreen.Bounds.Width;
-            ScreenYOffset.Minimum = 0 - Screen.PrimaryScreen.Bounds.Height;
-            TouchpadXOffset.Minimum = 0 - Convert.ToDouble(xMax);
-            TouchpadYOffset.Minimum = 0 - Convert.ToDouble(yMax);
-
             // Set large change maximums
             ScreenXOffset.LargeChange = Screen.PrimaryScreen.Bounds.Width / 10;
             ScreenYOffset.LargeChange = Screen.PrimaryScreen.Bounds.Height / 10;
