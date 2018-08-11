@@ -326,6 +326,7 @@ namespace absolutetouch_gui
             {
                 touchpadY2.IsEnabled = true;
             }
+            DebugUpdate();
             return;
         }
 
@@ -535,6 +536,41 @@ namespace absolutetouch_gui
             }
         }
 
+        // Debug group methods
+        
+        public void DebugUpdate()
+        {
+            if (debuggingCheckbox.IsChecked == true)
+            {
+                DebugTab.Visibility = Visibility.Visible;
+
+                DebugTextBlock.Text = null; // clear textblock
+                var debugtext = new StringBuilder()
+                    .AppendLine($"Version: {System.Windows.Forms.Application.ProductVersion}")
+                    .AppendLine($"InstallLocation: {InstallLocation}")
+                    .AppendLine($"screenX1: {screenX1.Text}")
+                    .AppendLine($"screenY1: {screenY1.Text}")
+                    .AppendLine($"screenX2: {screenX2.Text}")
+                    .AppendLine($"screenY2: {screenY2.Text}")
+                    .AppendLine($"touchpadX1: {touchpadX1.Text}")
+                    .AppendLine($"touchpadY1: {touchpadY1.Text}")
+                    .AppendLine($"touchpadX2: {touchpadX2.Text}")
+                    .AppendLine($"touchpadY2: {touchpadY2.Text}")
+                    .AppendLine($"weight: {WeightSlider.Value}");
+                DebugTextBlock.Text = debugtext.ToString();
+            }
+            else if (debuggingCheckbox.IsChecked == false)
+            {
+                DebugTab.Visibility = Visibility.Hidden;
+                DebugTextBlock.Text = null;
+            }
+        }
+
+        void CopyDebugInfo()
+        {
+            System.Windows.Forms.Clipboard.SetText(DebugTextBlock.Text);
+        }
+        
         #endregion
 
         #region  Button Methods
@@ -718,6 +754,15 @@ namespace absolutetouch_gui
             AboutBox box = new AboutBox();  
             box.ShowDialog();
         }
+
+        // Debug
+
+        private void DebugScreen_Focused(object sender, RoutedEventArgs e) => DebugUpdate();
+
+        private void UpdateDebugTab(object sender, RoutedEventArgs e) => DebugUpdate();
+
+        private void DebugTextBlock_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => CopyDebugInfo();
+
         #endregion
     }
 }

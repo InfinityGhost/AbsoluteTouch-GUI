@@ -127,6 +127,7 @@
                             <Button x:Name="FindInstallLocationButton" Content="Find..." HorizontalAlignment="Left" Margin="504,2,0,0" VerticalAlignment="Top" Height="23" Width="60" Click="FindInstallLocationButton_Click"/>
                         </Grid>
                     </GroupBox>
+                    <CheckBox x:Name="debuggingCheckbox" Content="Enable debugging" HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Margin="10,55,0,0" Click="UpdateDebugTab"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="PlottingTab" Header="Plotting">
@@ -138,6 +139,13 @@
                         <Canvas x:Name="canvasTouchpadArea" Cursor="Hand" Background="Transparent" ClipToBounds="False"/>
                     </GroupBox>
                 </Grid>
+            </TabItem>
+            <TabItem x:Name="DebugTab" Header="Debug" GotFocus="DebugScreen_Focused">
+                <GroupBox Header="Debug">
+                    <Grid>
+                        <TextBlock x:Name="DebugTextBlock" MouseLeftButtonDown="DebugTextBlock_MouseLeftButtonDown"/>
+                    </Grid>
+                </GroupBox>
             </TabItem>
         </TabControl>
         <StatusBar VerticalAlignment="Bottom" Height="18" Background="White" HorizontalAlignment="Left">
