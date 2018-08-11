@@ -8,7 +8,7 @@
         Title="AbsoluteTouch GUI" Height="418" Width="600" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
 
     <!--Start of Keyboard Commands-->
-    
+
     <Window.Resources>
         <RoutedCommand x:Key="RunProgram"/>
         <RoutedCommand x:Key="SaveShortcut"/>
@@ -23,9 +23,9 @@
         <KeyBinding Key="R" Modifiers="Ctrl" Command="{StaticResource RunProgram}"/>
         <KeyBinding Key="S" Modifiers="Ctrl" Command="{StaticResource SaveShortcut}"/>
     </Window.InputBindings>
-    
+
     <!--Start of UI-->
-    
+
     <Grid>
         <Menu Height="24" VerticalAlignment="Top" Background="White">
             <MenuItem Header="File" Height="24" Margin="10,0,0,0">
@@ -34,7 +34,7 @@
                 <MenuItem x:Name="SaveSettingsButton" Header="Save settings" Click="SaveSettingsButton_Click"/>
                 <MenuItem x:Name="SaveDefaultButton" Header="Save default settings" Click="SaveDefaultButton_Click"/>
                 <MenuItem x:Name="ExitButton" Header="Exit" Click="ExitButton_Click"/>
-                
+
             </MenuItem>
             <MenuItem Header="Settings" Height="24">
                 <MenuItem x:Name="GetResolution" Header="Reset to default" Click="GetResolution_Click"/>
@@ -132,19 +132,17 @@
             </TabItem>
             <TabItem x:Name="PlottingTab" Header="Plotting">
                 <Grid>
-                    <GroupBox Header="Screen" HorizontalAlignment="Left" Width="281" Height="158" VerticalAlignment="Top" Cursor="Hand">
+                    <GroupBox Header="Screen" Width="281" Height="158" Cursor="Hand" Margin="0" VerticalAlignment="Top">
                         <Canvas x:Name="canvasScreenMap" Cursor="Hand" Background="Transparent" ClipToBounds="False"/>
                     </GroupBox>
-                    <GroupBox Header="Touchpad" Margin="0,158,0,0" Height="158" VerticalAlignment="Top" HorizontalAlignment="Left" Width="281">
+                    <GroupBox Header="Touchpad" Margin="0" Height="158" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="281">
                         <Canvas x:Name="canvasTouchpadArea" Cursor="Hand" Background="Transparent" ClipToBounds="False"/>
                     </GroupBox>
                 </Grid>
             </TabItem>
             <TabItem x:Name="DebugTab" Header="Debug" GotFocus="DebugScreen_Focused">
                 <GroupBox Header="Debug">
-                    <Grid>
-                        <TextBlock x:Name="DebugTextBlock" MouseLeftButtonDown="DebugTextBlock_MouseLeftButtonDown"/>
-                    </Grid>
+                    <TextBlock x:Name="DebugTextBlock" MouseLeftButtonDown="DebugTextBlock_MouseLeftButtonDown"/>
                 </GroupBox>
             </TabItem>
         </TabControl>
