@@ -48,12 +48,7 @@ namespace absolutetouch_gui
         SYNCTRLLib.SynAPICtrl api;
         SYNCTRLLib.SynDeviceCtrl device;
         int deviceHandle;
-        int xMin;
-        int xMax;
-        int yMin;
-        int yMax;
-        int xDPI;
-        int yDPI;
+        int xMin, xMax, yMin, yMax, xDPI, yDPI;
 
         // setters / getters
 
