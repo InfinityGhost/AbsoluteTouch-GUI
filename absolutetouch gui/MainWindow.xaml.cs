@@ -36,18 +36,18 @@ namespace absolutetouch_gui
             UpdateUseableOptions();
         }
 
-        #region Public Variables
+        #region Variables
 
         public System.Diagnostics.Process absoluteTouchProcess;
-        public string settingsLocation;
+        
         // resolutions
-        public double touchpadWidth;
-        public double touchpadHeight;
+        public double TouchpadWidth { get; set; }
+        public double TouchpadHeight { get; set; }
 
         // Synaptics API variables
         SYNCTRLLib.SynAPICtrl api;
         SYNCTRLLib.SynDeviceCtrl device;
-        int deviceHandle;
+        int DeviceHandle { get; set; }
         int xMin, xMax, yMin, yMax, xDPI, yDPI;
 
         // setters / getters
@@ -100,6 +100,8 @@ namespace absolutetouch_gui
                 _InstallLocation = value;
             }
         }
+
+        public string SettingsLocation { get; set; }
 
         #endregion
 
@@ -228,8 +230,8 @@ namespace absolutetouch_gui
             // Set large change maximums
             ScreenXOffset.LargeChange = Screen.PrimaryScreen.Bounds.Width / 10;
             ScreenYOffset.LargeChange = Screen.PrimaryScreen.Bounds.Height / 10;
-            TouchpadXOffset.LargeChange = touchpadWidth / 10;
-            TouchpadYOffset.LargeChange = touchpadHeight / 10;
+            TouchpadXOffset.LargeChange = TouchpadWidth / 10;
+            TouchpadYOffset.LargeChange = TouchpadHeight / 10;
 
             UpdateUseableOptions();
             return;
@@ -244,8 +246,8 @@ namespace absolutetouch_gui
                     api.Initialize();
                     api.Activate();
                     // Select first device found
-                    deviceHandle = api.FindDevice(SYNCTRLLib.SynConnectionType.SE_ConnectionAny, SYNCTRLLib.SynDeviceType.SE_DeviceTouchPad, -1);
-                    device.Select(deviceHandle);
+                    DeviceHandle = api.FindDevice(SYNCTRLLib.SynConnectionType.SE_ConnectionAny, SYNCTRLLib.SynDeviceType.SE_DeviceTouchPad, -1);
+                    device.Select(DeviceHandle);
                     device.Activate();
 
                     xMin = int.Parse((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_XLoSensor).ToString()));
@@ -371,7 +373,7 @@ namespace absolutetouch_gui
         public void LoadSettings()
         {
             // Begin loading settings from text file
-            if (settingsLocation == null)
+            if (SettingsLocation == null)
             {
                 return;
             }
@@ -384,31 +386,31 @@ namespace absolutetouch_gui
 
                     // Input settings tab
                     // Screen bounds
-                    screenX1.Text = File.ReadLines(settingsLocation).Take(1).First();
-                    screenY1.Text = File.ReadLines(settingsLocation).Skip(1).Take(1).First();
-                    screenX2.Text = File.ReadLines(settingsLocation).Skip(2).Take(1).First();
-                    screenY2.Text = File.ReadLines(settingsLocation).Skip(3).Take(1).First();
+                    screenX1.Text = File.ReadLines(SettingsLocation).Take(1).First();
+                    screenY1.Text = File.ReadLines(SettingsLocation).Skip(1).Take(1).First();
+                    screenX2.Text = File.ReadLines(SettingsLocation).Skip(2).Take(1).First();
+                    screenY2.Text = File.ReadLines(SettingsLocation).Skip(3).Take(1).First();
                     // Touchpad bounds
-                    touchpadX1.Text = File.ReadLines(settingsLocation).Skip(4).Take(1).First();
-                    touchpadY1.Text = File.ReadLines(settingsLocation).Skip(5).Take(1).First();
-                    touchpadX2.Text = File.ReadLines(settingsLocation).Skip(6).Take(1).First();
-                    touchpadY2.Text = File.ReadLines(settingsLocation).Skip(7).Take(1).First();
+                    touchpadX1.Text = File.ReadLines(SettingsLocation).Skip(4).Take(1).First();
+                    touchpadY1.Text = File.ReadLines(SettingsLocation).Skip(5).Take(1).First();
+                    touchpadX2.Text = File.ReadLines(SettingsLocation).Skip(6).Take(1).First();
+                    touchpadY2.Text = File.ReadLines(SettingsLocation).Skip(7).Take(1).First();
                     // Sliders
-                    WeightSlider.Value = double.Parse(File.ReadLines(settingsLocation).Skip(8).Take(1).First());
+                    WeightSlider.Value = double.Parse(File.ReadLines(SettingsLocation).Skip(8).Take(1).First());
                     // Checkboxes
-                    UseOffset.IsChecked = bool.Parse(File.ReadLines(settingsLocation).Skip(9).Take(1).First());
-                    LockAspectRatio.IsChecked = bool.Parse(File.ReadLines(settingsLocation).Skip(10).Take(1).First());
-                    EnableClick.IsChecked = bool.Parse(File.ReadLines(settingsLocation).Skip(11).Take(1).First());
-                    DisableOnExit.IsChecked = bool.Parse(File.ReadLines(settingsLocation).Skip(12).Take(1).First());
+                    UseOffset.IsChecked = bool.Parse(File.ReadLines(SettingsLocation).Skip(9).Take(1).First());
+                    LockAspectRatio.IsChecked = bool.Parse(File.ReadLines(SettingsLocation).Skip(10).Take(1).First());
+                    EnableClick.IsChecked = bool.Parse(File.ReadLines(SettingsLocation).Skip(11).Take(1).First());
+                    DisableOnExit.IsChecked = bool.Parse(File.ReadLines(SettingsLocation).Skip(12).Take(1).First());
                     // Offset tab
                     // Sliders
-                    ScreenXOffset.Value = double.Parse(File.ReadLines(settingsLocation).Skip(13).Take(1).First());
-                    ScreenYOffset.Value = double.Parse(File.ReadLines(settingsLocation).Skip(14).Take(1).First());
-                    TouchpadXOffset.Value = double.Parse(File.ReadLines(settingsLocation).Skip(15).Take(1).First());
-                    TouchpadYOffset.Value = double.Parse(File.ReadLines(settingsLocation).Skip(16).Take(1).First());
+                    ScreenXOffset.Value = double.Parse(File.ReadLines(SettingsLocation).Skip(13).Take(1).First());
+                    ScreenYOffset.Value = double.Parse(File.ReadLines(SettingsLocation).Skip(14).Take(1).First());
+                    TouchpadXOffset.Value = double.Parse(File.ReadLines(SettingsLocation).Skip(15).Take(1).First());
+                    TouchpadYOffset.Value = double.Parse(File.ReadLines(SettingsLocation).Skip(16).Take(1).First());
                     // Setup tab
                     // Textboxes
-                    InstallLocationTextbox.Text = File.ReadLines(settingsLocation).Skip(17).Take(1).First();
+                    InstallLocationTextbox.Text = File.ReadLines(SettingsLocation).Skip(17).Take(1).First();
                 }
                 catch (System.ArgumentException)
                 {
@@ -434,18 +436,18 @@ namespace absolutetouch_gui
             };
             if (openFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                settingsLocation = openFile.FileName;
+                SettingsLocation = openFile.FileName;
             }
             else
             {
-                settingsLocation = null;
+                SettingsLocation = null;
             }
         }
 
         public void SaveSettings()
         {
             // Begin saving settings to text file
-            if (settingsLocation == null)
+            if (SettingsLocation == null)
             {
                 return;
             }
@@ -453,8 +455,8 @@ namespace absolutetouch_gui
             {
                 try
                 {
-                    File.WriteAllText(settingsLocation, String.Empty);
-                    StreamWriter saveSettings = File.AppendText(settingsLocation);
+                    File.WriteAllText(SettingsLocation, String.Empty);
+                    StreamWriter saveSettings = File.AppendText(SettingsLocation);
                     // Input settings tab
                     // Screen bounds
                     saveSettings.WriteLine(screenX1.Text);
@@ -507,11 +509,11 @@ namespace absolutetouch_gui
             };
             if (openFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                settingsLocation = openFile.FileName;
+                SettingsLocation = openFile.FileName;
             }
             else
             {
-                settingsLocation = null;
+                SettingsLocation = null;
             }
             return;
         }
@@ -520,7 +522,7 @@ namespace absolutetouch_gui
         {
             if (File.Exists(Directory.GetCurrentDirectory() + @"\AbsoluteTouchDefault.setup") == true)
             {
-                settingsLocation = Directory.GetCurrentDirectory() + @"\AbsoluteTouchDefault.setup";
+                SettingsLocation = Directory.GetCurrentDirectory() + @"\AbsoluteTouchDefault.setup";
                 if (APIAvailable == false)
                 {
                     StatusbarText.Text = "Warning: Synaptics touchpad drivers are missing. Default settings loaded.";
@@ -707,7 +709,7 @@ namespace absolutetouch_gui
 
         private void SaveDefaultButton_Click(object sender, RoutedEventArgs e)
         {
-            settingsLocation = Directory.GetCurrentDirectory() + @"\AbsoluteTouchDefault.setup";
+            SettingsLocation = Directory.GetCurrentDirectory() + @"\AbsoluteTouchDefault.setup";
             SaveSettings();
         }
 
