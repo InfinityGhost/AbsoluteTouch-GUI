@@ -172,10 +172,10 @@ namespace absolutetouch_gui
                 double touchpadY1Offset = double.Parse(touchpadY.Text);
                 double touchpadX2Offset = double.Parse(touchpadWidth.Text) + double.Parse(touchpadX.Text);
                 double touchpadY2Offset = double.Parse(touchpadHeight.Text) + double.Parse(touchpadY.Text);
-                double screenX1Offset = double.Parse(touchpadX.Text);
-                double screenY1Offset = double.Parse(touchpadY.Text);
-                double screenX2Offset = double.Parse(screenWidth.Text) + double.Parse(touchpadX.Text);
-                double screenY2Offset = double.Parse(screenHeight.Text) + double.Parse(touchpadY.Text);
+                double screenX1Offset = double.Parse(screenX.Text);
+                double screenY1Offset = double.Parse(screenY.Text);
+                double screenX2Offset = double.Parse(screenWidth.Text) + double.Parse(screenX.Text);
+                double screenY2Offset = double.Parse(screenHeight.Text) + double.Parse(screenY.Text);
                 double weight = WeightSlider.Value;
 
                 // get toggle arguments
