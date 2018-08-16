@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:absolutetouch_gui"
         mc:Ignorable="d"
-        Title="AbsoluteTouch GUI" Height="660" Width="750" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
+        Title="AbsoluteTouch GUI" Height="660" Width="750" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Loaded="MainWindow_Loaded">
 
     <!--Start of Keyboard Commands-->
 
@@ -49,46 +49,46 @@
                         <Grid>
                             <GroupBox Header="Screen Map" Margin="10,6,10,0" Height="205" VerticalAlignment="Top">
                                 <Grid>
-                                    <GroupBox Header="X Offset" Height="50" VerticalAlignment="Bottom" Width="122" Margin="350,0,0,0" HorizontalAlignment="Left">
-                                        <TextBox x:Name="screenX" Margin="2" Height="23" />
-                                    </GroupBox>
                                     <GroupBox Header="Width" Height="50" Margin="96,0,0,0" VerticalAlignment="Bottom" Width="122" HorizontalAlignment="Left">
-                                        <TextBox x:Name="screenWidth" Margin="2" Height="23" />
-                                    </GroupBox>
-                                    <GroupBox Header="Y Offset" Height="50" Margin="477,0,0,0" VerticalAlignment="Bottom" Width="122" HorizontalAlignment="Left">
-                                        <TextBox x:Name="screenY" Margin="2" Height="23" />
+                                        <TextBox x:Name="screenWidth" Margin="2" Height="23" TextChanged="SettingsTextChanged" />
                                     </GroupBox>
                                     <GroupBox Header="Height" Height="50" Margin="223,0,0,0" VerticalAlignment="Bottom" Width="122" HorizontalAlignment="Left">
-                                        <TextBox x:Name="screenY2" Margin="2" Height="23" />
+                                        <TextBox x:Name="screenHeight" Margin="2" Height="23" TextChanged="SettingsTextChanged" />
                                     </GroupBox>
-                                    <Canvas x:Name="canvasScreenMap" Cursor="Hand" Background="Transparent" ClipToBounds="False" Margin="0,0,0,53" Height="130"/>
+                                    <GroupBox Header="X Offset" Height="50" VerticalAlignment="Bottom" Width="122" Margin="350,0,0,0" HorizontalAlignment="Left">
+                                        <TextBox x:Name="screenX" Margin="2" Height="23" TextChanged="SettingsTextChanged" />
+                                    </GroupBox>
+                                    <GroupBox Header="Y Offset" Height="50" Margin="477,0,0,0" VerticalAlignment="Bottom" Width="122" HorizontalAlignment="Left">
+                                        <TextBox x:Name="screenY" Margin="2" Height="23" TextChanged="SettingsTextChanged" />
+                                    </GroupBox>
+                                    <Canvas x:Name="canvasScreenMap" Cursor="Hand" Background="Transparent" ClipToBounds="True" Margin="0,0,0,53" Height="130" MouseDown="canvasScreenMap_MouseDown"/>
                                 </Grid>
                             </GroupBox>
                             <GroupBox Header="Touchpad Area" Margin="10,216,10,0" Height="205" VerticalAlignment="Top">
                                 <Grid>
-                                    <GroupBox Header="X Offset" Height="50" VerticalAlignment="Bottom" Width="122" Margin="350,0,0,0" HorizontalAlignment="Left">
-                                        <TextBox x:Name="touchpadX" Margin="2" Height="23" />
-                                    </GroupBox>
                                     <GroupBox Header="Width" Height="50" VerticalAlignment="Bottom" Width="122" Margin="96,0,0,0" HorizontalAlignment="Left">
-                                        <TextBox x:Name="touchpadWidth" Margin="2" Height="23"  TextChanged="TouchpadX2_TextChanged"/>
-                                    </GroupBox>
-                                    <GroupBox Header="Y Offset" Height="50" VerticalAlignment="Bottom" Width="122" Margin="477,0,0,0" HorizontalAlignment="Left">
-                                        <TextBox x:Name="touchpadY" Margin="2" Height="23" />
+                                        <TextBox x:Name="touchpadWidth" Margin="2" Height="23"  TextChanged="SettingsTextChanged"/>
                                     </GroupBox>
                                     <GroupBox Header="Height" Height="50" VerticalAlignment="Bottom" Width="122" Margin="223,0,0,0" HorizontalAlignment="Left">
-                                        <TextBox x:Name="touchpadHeight" Margin="2" Height="23" />
+                                        <TextBox x:Name="touchpadHeight" Margin="2" Height="23" TextChanged="SettingsTextChanged" />
+                                    </GroupBox>
+                                    <GroupBox Header="X Offset" Height="50" VerticalAlignment="Bottom" Width="122" Margin="350,0,0,0" HorizontalAlignment="Left">
+                                        <TextBox x:Name="touchpadX" Margin="2" Height="23" TextChanged="SettingsTextChanged" />
+                                    </GroupBox>
+                                    <GroupBox Header="Y Offset" Height="50" VerticalAlignment="Bottom" Width="122" Margin="477,0,0,0" HorizontalAlignment="Left">
+                                        <TextBox x:Name="touchpadY" Margin="2" Height="23" TextChanged="SettingsTextChanged" />
                                     </GroupBox>
                                     <CheckBox x:Name="EnableClick" Content="Enable click" HorizontalAlignment="Left" Height="16" Margin="477,10,0,0" VerticalAlignment="Top"/>
                                     <CheckBox x:Name="DisableOnExit" Content="Disable touchpad on exit" HorizontalAlignment="Left" Height="16" Margin="477,31,0,0" VerticalAlignment="Top"/>
-                                    <Canvas x:Name="canvasTouchpadArea" Cursor="Hand" ClipToBounds="False" Height="130" Width="250" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                                     <CheckBox x:Name="LockAspectRatio" Content="Lock aspect ratio" HorizontalAlignment="Left" Height="16" Margin="477,52,0,0" VerticalAlignment="Top" Click="LockAspectRatio_Click"/>
+                                    <Canvas x:Name="canvasTouchpadArea" Cursor="Hand" ClipToBounds="True" Height="130" Width="250" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                                 </Grid>
                             </GroupBox>
 
 
                             <GroupBox Header="Weight" Margin="0,426,0,0" HorizontalAlignment="Center" Width="707" Height="50" VerticalAlignment="Top">
                                 <Grid>
-                                    <Slider x:Name="WeightSlider" Margin="2,4,47,1" Height="23" Maximum="1" SmallChange="0.01" IsSnapToTickEnabled="True" ValueChanged="WeightSlider_ValueChanged" ToolTip="Sets the touch smoothing factor (0 - 1)" LargeChange=".10" TickFrequency="0.01" />
+                                    <Slider x:Name="WeightSlider" Margin="2,4,47,3" Maximum="1" SmallChange="0.01" IsSnapToTickEnabled="True" ValueChanged="WeightSlider_ValueChanged" ToolTip="Sets the touch smoothing factor (0 - 1)" LargeChange=".10" TickFrequency="0.01" />
                                     <TextBox x:Name="WeightTextbox" Margin="500,2,2,2" Height="23" TextChanged="WeightTextbox_TextChanged" Width="40" HorizontalAlignment="Right"/>
                                     <!--<Label Width="21" HorizontalAlignment="Right" Margin="0">%</Label>-->
                                 </Grid>
@@ -98,40 +98,12 @@
                     <Button x:Name="RunButton" Content="Run" HorizontalAlignment="Center" Width="74" Height="30" VerticalAlignment="Bottom" Command="{StaticResource RunProgram}" Margin="0,0,0,10"/>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="OffsetTab" Header="Offset">
-                <Grid>
-                    <GroupBox Margin="10,12,0,0" Height="50" Header="Screen Horizontal Offset" VerticalAlignment="Top" HorizontalAlignment="Left" Width="265">
-                        <Grid>
-                            <Slider x:Name="ScreenXOffset" AutoToolTipPlacement="TopLeft" ValueChanged="ScreenXOffset_ValueChanged" TickFrequency="10" IsSnapToTickEnabled="True" SmallChange="0" Margin="5,4,50,1"/>
-                            <TextBox x:Name="ScreenXOffsetTextbox" Height="23" Margin="208,2,5,2" TextChanged="ScreenXOffsetTextbox_TextChanged"/>
-                        </Grid>
-                    </GroupBox>
-                    <GroupBox Margin="10,67,0,0" Height="50" Header="Screen Vertical Offset" VerticalAlignment="Top" HorizontalAlignment="Left" Width="265">
-                        <Grid>
-                            <Slider x:Name="ScreenYOffset" AutoToolTipPlacement="TopLeft" TickFrequency="10" IsSnapToTickEnabled="True" Margin="5,4,0,1" HorizontalAlignment="Left" Width="198" ValueChanged="ScreenYOffset_ValueChanged"/>
-                            <TextBox x:Name="ScreenYOffsetTextbox" Height="23" Margin="208,2,5,2" TextChanged="ScreenYOffsetTextbox_TextChanged"/>
-                        </Grid>
-                    </GroupBox>
-                    <GroupBox Margin="10,122,0,0" Height="50" Header="Touchpad Horizontal Offset" VerticalAlignment="Top" HorizontalAlignment="Left" Width="265">
-                        <Grid>
-                            <Slider x:Name="TouchpadXOffset" Maximum="4864" AutoToolTipPlacement="TopLeft" TickFrequency="10" IsSnapToTickEnabled="True" Margin="5,4,50,1" ValueChanged="TouchpadXOffset_ValueChanged"/>
-                            <TextBox x:Name="TouchpadXOffsetTextbox" Margin="208,2,5,3" TextChanged="TouchpadXOffsetTextbox_TextChanged"/>
-                        </Grid>
-                    </GroupBox>
-                    <GroupBox  Margin="10,177,0,0" Height="50" Header="Touchpad Vertical Offset" VerticalAlignment="Top" HorizontalAlignment="Left" Width="265">
-                        <Grid>
-                            <Slider x:Name="TouchpadYOffset" Maximum="3840" AutoToolTipPlacement="TopLeft" TickFrequency="10" IsSnapToTickEnabled="True" Margin="5,4,50,1" ValueChanged="TouchpadYOffset_ValueChanged"/>
-                            <TextBox x:Name="TouchpadYOffsetTextbox" Height="23" Margin="208,2,5,2" TextChanged="TouchpadYOffsetTextbox_TextChanged"/>
-                        </Grid>
-                    </GroupBox>
-                </Grid>
-            </TabItem>
             <TabItem x:Name="SetupTab" Header="Setup">
                 <Grid>
                     <GroupBox Header="AbsoluteTouch Install Location" Height="50" VerticalAlignment="Top">
                         <Grid>
-                            <TextBox x:Name="InstallLocationTextbox" Margin="0,2,0,0" Height="23" VerticalAlignment="Top" TextChanged="InstallLocationTextbox_TextChanged" HorizontalAlignment="Left" Width="499"/>
-                            <Button x:Name="FindInstallLocationButton" Content="Find..." HorizontalAlignment="Left" Margin="504,2,0,0" VerticalAlignment="Top" Height="23" Width="60" Click="FindInstallLocationButton_Click"/>
+                            <TextBox x:Name="InstallLocationTextbox" Margin="2,2,68,0" Height="23" VerticalAlignment="Top" TextChanged="InstallLocationTextbox_TextChanged"/>
+                            <Button x:Name="FindInstallLocationButton" Content="Find..." HorizontalAlignment="Right" Margin="504,2,2,0" VerticalAlignment="Top" Height="23" Width="60" Click="FindInstallLocationButton_Click"/>
                         </Grid>
                     </GroupBox>
                     <CheckBox x:Name="debuggingCheckbox" Content="Enable debugging" HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Margin="10,55,0,0" Click="UpdateDebugTab"/>
@@ -144,11 +116,15 @@
                 </Grid>
             </TabItem>
             <TabItem x:Name="DebugTab" Header="Debug" GotFocus="DebugScreen_Focused">
-                <GroupBox Header="Debug">
-                    <Grid>
-                        <TextBlock x:Name="DebugTextBlock" MouseLeftButtonDown="DebugTextBlock_MouseLeftButtonDown"/>
-                    </Grid>
-                </GroupBox>
+                <Grid>
+                    <GroupBox Header="Debug" Margin="0,0,0,50">
+                        <Grid>
+                            <TextBlock x:Name="DebugTextBlock" MouseLeftButtonDown="DebugTextBlock_MouseLeftButtonDown"/>
+                        </Grid>
+                    </GroupBox>
+                    <Button x:Name="ForceCanvasUpdate" Content="Force canvas update" HorizontalAlignment="Center" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,10" Padding="5,1" Click="ForceCanvasUpdate_Click"/>
+
+                </Grid>
             </TabItem>
         </TabControl>
         <StatusBar VerticalAlignment="Bottom" Height="18" Background="White" HorizontalAlignment="Left">
