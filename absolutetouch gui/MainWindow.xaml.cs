@@ -436,15 +436,10 @@ namespace absolutetouch_gui
             Rectangle touchpadResolution;
             if (_APIAvailable == true)
             {
-                double XLoSensor = Convert.ToDouble(device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_XLoSensor));
-                double YLoSensor = Convert.ToDouble(device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_YLoSensor));
-                double XHiSensor = Convert.ToDouble(device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_XHiSensor));
-                double YHiSensor = Convert.ToDouble(device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_YHiSensor));
-
                 touchpadResolution = new Rectangle
                 {
-                    Width = XHiSensor - XLoSensor,
-                    Height = YHiSensor - YLoSensor
+                    Width = xMax - xMin,
+                    Height = yMax - yMin
                 };
             }
             else
