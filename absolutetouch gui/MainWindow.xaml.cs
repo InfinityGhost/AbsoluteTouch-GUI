@@ -777,7 +777,7 @@ namespace absolutetouch_gui
             }
             catch(Exception ex)
             {
-                StatusbarText.Text = $"{ex}";
+                //StatusbarText.Text = $"{ex}";
             }
         }
 
