@@ -196,7 +196,6 @@ namespace absolutetouch_gui
         private void Defaults()
         {
             // Reset checkboxes
-            UseOffset.IsChecked = false;
             LockAspectRatio.IsChecked = false;
             EnableClick.IsChecked = false;
             DisableOnExit.IsChecked = false;
@@ -288,36 +287,6 @@ namespace absolutetouch_gui
 
         private void UpdateUseableOptions()
         {
-            if (UseOffset.IsChecked == true)
-            {
-                screenX1.IsEnabled = false;
-                screenY1.IsEnabled = false;
-                touchpadX1.IsEnabled = false;
-                touchpadY1.IsEnabled = false;
-                ScreenXOffset.IsEnabled = true;
-                ScreenYOffset.IsEnabled = true;
-                TouchpadXOffset.IsEnabled = true;
-                TouchpadYOffset.IsEnabled = true;
-                ScreenXOffsetTextbox.IsEnabled = true;
-                ScreenYOffsetTextbox.IsEnabled = true;
-                TouchpadXOffsetTextbox.IsEnabled = true;
-                TouchpadYOffsetTextbox.IsEnabled = true;
-            }
-            else if (UseOffset.IsChecked == false)
-            {
-                screenX1.IsEnabled = true;
-                screenY1.IsEnabled = true;
-                touchpadX1.IsEnabled = true;
-                touchpadY1.IsEnabled = true;
-                ScreenXOffset.IsEnabled = false;
-                ScreenYOffset.IsEnabled = false;
-                TouchpadXOffset.IsEnabled = false;
-                TouchpadYOffset.IsEnabled = false;
-                ScreenXOffsetTextbox.IsEnabled = false;
-                ScreenYOffsetTextbox.IsEnabled = false;
-                TouchpadXOffsetTextbox.IsEnabled = false;
-                TouchpadYOffsetTextbox.IsEnabled = false;
-            }
             if (LockAspectRatio.IsChecked == true)
             {
                 touchpadY2.IsEnabled = false;
@@ -399,7 +368,7 @@ namespace absolutetouch_gui
                     // Sliders
                     WeightSlider.Value = double.Parse(File.ReadLines(SettingsLocation).Skip(8).Take(1).First());
                     // Checkboxes
-                    UseOffset.IsChecked = bool.Parse(File.ReadLines(SettingsLocation).Skip(9).Take(1).First());
+                    // old UseOffset line
                     LockAspectRatio.IsChecked = bool.Parse(File.ReadLines(SettingsLocation).Skip(10).Take(1).First());
                     EnableClick.IsChecked = bool.Parse(File.ReadLines(SettingsLocation).Skip(11).Take(1).First());
                     DisableOnExit.IsChecked = bool.Parse(File.ReadLines(SettingsLocation).Skip(12).Take(1).First());
@@ -472,7 +441,7 @@ namespace absolutetouch_gui
                     // Sliders
                     saveSettings.WriteLine(WeightSlider.Value.ToString());
                     // Checkboxes
-                    saveSettings.WriteLine(UseOffset.IsChecked.ToString());
+                    saveSettings.WriteLine(String.Empty); // old UseOffset line
                     saveSettings.WriteLine(LockAspectRatio.IsChecked.ToString());
                     saveSettings.WriteLine(EnableClick.IsChecked.ToString());
                     saveSettings.WriteLine(DisableOnExit.IsChecked.ToString());
@@ -623,21 +592,7 @@ namespace absolutetouch_gui
         }
 
         private void GetResolution_Click(object sender, RoutedEventArgs e) => Defaults();
-
-        private void UseOffset_Clicked(object sender, RoutedEventArgs e)
-        {
-            if (UseOffset.IsChecked == true)
-            {
-                //OffsetTab.IsSelected = true;
-                //OffsetTab.IsEnabled = true;
-            }
-            else if (UseOffset.IsChecked == false)
-            {
-                //OffsetTab.IsEnabled = false;
-            }
-            UpdateUseableOptions();
-        }
-
+        
         private void LockAspectRatio_Click(object sender, RoutedEventArgs e)
         {
             if (LockAspectRatio.IsChecked == true)

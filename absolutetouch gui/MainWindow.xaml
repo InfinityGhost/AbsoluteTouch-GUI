@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:absolutetouch_gui"
         mc:Ignorable="d"
-        Title="AbsoluteTouch GUI" Height="418" Width="600" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
+        Title="AbsoluteTouch GUI" Height="660" Width="750" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
 
     <!--Start of Keyboard Commands-->
-    
+
     <Window.Resources>
         <RoutedCommand x:Key="RunProgram"/>
         <RoutedCommand x:Key="SaveShortcut"/>
@@ -23,9 +23,9 @@
         <KeyBinding Key="R" Modifiers="Ctrl" Command="{StaticResource RunProgram}"/>
         <KeyBinding Key="S" Modifiers="Ctrl" Command="{StaticResource SaveShortcut}"/>
     </Window.InputBindings>
-    
+
     <!--Start of UI-->
-    
+
     <Grid>
         <Menu Height="24" VerticalAlignment="Top" Background="White">
             <MenuItem Header="File" Height="24" Margin="10,0,0,0">
@@ -34,7 +34,7 @@
                 <MenuItem x:Name="SaveSettingsButton" Header="Save settings" Click="SaveSettingsButton_Click"/>
                 <MenuItem x:Name="SaveDefaultButton" Header="Save default settings" Click="SaveDefaultButton_Click"/>
                 <MenuItem x:Name="ExitButton" Header="Exit" Click="ExitButton_Click"/>
-                
+
             </MenuItem>
             <MenuItem Header="Settings" Height="24">
                 <MenuItem x:Name="GetResolution" Header="Reset to default" Click="GetResolution_Click"/>
@@ -47,45 +47,52 @@
                 <Grid>
                     <GroupBox Header="Settings" Margin="0,0,0,50">
                         <Grid>
-                            <Label Content="Screen Coordinates" HorizontalAlignment="Left" Margin="80,1,0,0" VerticalAlignment="Top" Height="26"/>
-                            <GroupBox Header="X1" HorizontalAlignment="Left" Height="50" Margin="10,24,0,0" VerticalAlignment="Top" Width="122">
-                                <TextBox x:Name="screenX1" Margin="2" Height="23" />
+                            <GroupBox Header="Screen Map" Margin="10,6,10,0" Height="205" VerticalAlignment="Top">
+                                <Grid>
+                                    <GroupBox Header="X Offset" Height="50" VerticalAlignment="Bottom" Width="122" Margin="350,0,0,0" HorizontalAlignment="Left">
+                                        <TextBox x:Name="screenX1" Margin="2" Height="23" />
+                                    </GroupBox>
+                                    <GroupBox Header="Width" Height="50" Margin="96,0,0,0" VerticalAlignment="Bottom" Width="122" HorizontalAlignment="Left">
+                                        <TextBox x:Name="screenX2" Margin="2" Height="23" />
+                                    </GroupBox>
+                                    <GroupBox Header="Y Offset" Height="50" Margin="477,0,0,0" VerticalAlignment="Bottom" Width="122" HorizontalAlignment="Left">
+                                        <TextBox x:Name="screenY1" Margin="2" Height="23" />
+                                    </GroupBox>
+                                    <GroupBox Header="Height" Height="50" Margin="223,0,0,0" VerticalAlignment="Bottom" Width="122" HorizontalAlignment="Left">
+                                        <TextBox x:Name="screenY2" Margin="2" Height="23" />
+                                    </GroupBox>
+                                    <Canvas x:Name="canvasScreenMap" Cursor="Hand" Background="Transparent" ClipToBounds="False" Margin="0,0,0,53" Height="130"/>
+                                </Grid>
                             </GroupBox>
-                            <GroupBox Header="X2" HorizontalAlignment="Left" Height="50" Margin="142,24,0,0" VerticalAlignment="Top" Width="122">
-                                <TextBox x:Name="screenX2" Margin="2" Height="23" />
+                            <GroupBox Header="Touchpad Area" Margin="10,216,10,0" Height="205" VerticalAlignment="Top">
+                                <Grid>
+                                    <GroupBox Header="X Offset" Height="50" VerticalAlignment="Bottom" Width="122" Margin="350,0,0,0" HorizontalAlignment="Left">
+                                        <TextBox x:Name="touchpadX1" Margin="2" Height="23" />
+                                    </GroupBox>
+                                    <GroupBox Header="Width" Height="50" VerticalAlignment="Bottom" Width="122" Margin="96,0,0,0" HorizontalAlignment="Left">
+                                        <TextBox x:Name="touchpadX2" Margin="2" Height="23"  TextChanged="TouchpadX2_TextChanged"/>
+                                    </GroupBox>
+                                    <GroupBox Header="Y Offset" Height="50" VerticalAlignment="Bottom" Width="122" Margin="477,0,0,0" HorizontalAlignment="Left">
+                                        <TextBox x:Name="touchpadY1" Margin="2" Height="23" />
+                                    </GroupBox>
+                                    <GroupBox Header="Height" Height="50" VerticalAlignment="Bottom" Width="122" Margin="223,0,0,0" HorizontalAlignment="Left">
+                                        <TextBox x:Name="touchpadY2" Margin="2" Height="23" />
+                                    </GroupBox>
+                                    <CheckBox x:Name="EnableClick" Content="Enable click" HorizontalAlignment="Left" Height="16" Margin="477,10,0,0" VerticalAlignment="Top"/>
+                                    <CheckBox x:Name="DisableOnExit" Content="Disable touchpad on exit" HorizontalAlignment="Left" Height="16" Margin="477,31,0,0" VerticalAlignment="Top"/>
+                                    <Canvas x:Name="canvasTouchpadArea" Cursor="Hand" ClipToBounds="False" Height="130" Width="250" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                                    <CheckBox x:Name="LockAspectRatio" Content="Lock aspect ratio" HorizontalAlignment="Left" Height="16" Margin="477,52,0,0" VerticalAlignment="Top" Click="LockAspectRatio_Click"/>
+                                </Grid>
                             </GroupBox>
-                            <GroupBox Header="Y1" HorizontalAlignment="Left" Height="50" Margin="10,79,0,0" VerticalAlignment="Top" Width="122">
-                                <TextBox x:Name="screenY1" Margin="2" Height="23" />
-                            </GroupBox>
-                            <GroupBox Header="Y2" HorizontalAlignment="Left" Height="50" Margin="142,79,0,0" VerticalAlignment="Top" Width="122">
-                                <TextBox x:Name="screenY2" Margin="2" Height="23" />
-                            </GroupBox>
-                            <GroupBox Header="X1" HorizontalAlignment="Left" Height="50" Margin="310,24,0,0" VerticalAlignment="Top" Width="122">
-                                <TextBox x:Name="touchpadX1" Margin="2" Height="23" />
-                            </GroupBox>
-                            <GroupBox Header="X2" HorizontalAlignment="Left" Height="50" Margin="442,24,0,0" VerticalAlignment="Top" Width="122">
-                                <TextBox x:Name="touchpadX2" Margin="2" Height="23"  TextChanged="TouchpadX2_TextChanged"/>
-                            </GroupBox>
-                            <Label Content="Touchpad Coordinates" HorizontalAlignment="Left" Margin="372,1,0,0" VerticalAlignment="Top" Height="26"/>
 
-                            <GroupBox Header="Y1" HorizontalAlignment="Left" Height="50" Margin="310,79,0,0" VerticalAlignment="Top" Width="122">
-                                <TextBox x:Name="touchpadY1" Margin="2" Height="23" />
-                            </GroupBox>
-                            <GroupBox Header="Y2" HorizontalAlignment="Left" Height="50" Margin="442,79,0,0" VerticalAlignment="Top" Width="122">
-                                <TextBox x:Name="touchpadY2" Margin="2" Height="23" />
-                            </GroupBox>
 
-                            <GroupBox Header="Weight" Margin="10,134,0,0" HorizontalAlignment="Left" Width="554" Height="50" VerticalAlignment="Top">
+                            <GroupBox Header="Weight" Margin="0,426,0,0" HorizontalAlignment="Center" Width="707" Height="50" VerticalAlignment="Top">
                                 <Grid>
                                     <Slider x:Name="WeightSlider" Margin="2,4,47,1" Height="23" Maximum="1" SmallChange="0.01" IsSnapToTickEnabled="True" ValueChanged="WeightSlider_ValueChanged" ToolTip="Sets the touch smoothing factor (0 - 1)" LargeChange=".10" TickFrequency="0.01" />
-                                    <TextBox x:Name="WeightTextbox" Margin="500,2,2,2" Height="23" TextChanged="WeightTextbox_TextChanged"/>
+                                    <TextBox x:Name="WeightTextbox" Margin="500,2,2,2" Height="23" TextChanged="WeightTextbox_TextChanged" Width="40" HorizontalAlignment="Right"/>
                                     <!--<Label Width="21" HorizontalAlignment="Right" Margin="0">%</Label>-->
                                 </Grid>
                             </GroupBox>
-                            <CheckBox x:Name="UseOffset" Content="Use offset (in offset tab)" HorizontalAlignment="Left" Height="16" Margin="20,192,0,0" VerticalAlignment="Top" Click="UseOffset_Clicked"/>
-                            <CheckBox x:Name="LockAspectRatio" Content="Lock aspect ratio" HorizontalAlignment="Left" Height="16" Margin="20,213,0,0" VerticalAlignment="Top" Click="LockAspectRatio_Click"/>
-                            <CheckBox x:Name="EnableClick" Content="Enable click (Github dev build only)" HorizontalAlignment="Left" Height="16" Margin="196,192,0,0" VerticalAlignment="Top"/>
-                            <CheckBox x:Name="DisableOnExit" Content="Disable touchpad on exit" HorizontalAlignment="Left" Height="16" Margin="196,213,0,0" VerticalAlignment="Top"/>
                         </Grid>
                     </GroupBox>
                     <Button x:Name="RunButton" Content="Run" HorizontalAlignment="Center" Width="74" Height="30" VerticalAlignment="Bottom" Command="{StaticResource RunProgram}" Margin="0,0,0,10"/>
@@ -132,12 +139,8 @@
             </TabItem>
             <TabItem x:Name="PlottingTab" Header="Plotting">
                 <Grid>
-                    <GroupBox Header="Screen" HorizontalAlignment="Left" Width="281" Height="158" VerticalAlignment="Top" Cursor="Hand">
-                        <Canvas x:Name="canvasScreenMap" Cursor="Hand" Background="Transparent" ClipToBounds="False"/>
-                    </GroupBox>
-                    <GroupBox Header="Touchpad" Margin="0,158,0,0" Height="158" VerticalAlignment="Top" HorizontalAlignment="Left" Width="281">
-                        <Canvas x:Name="canvasTouchpadArea" Cursor="Hand" Background="Transparent" ClipToBounds="False"/>
-                    </GroupBox>
+                    <GroupBox Header="Screen" HorizontalAlignment="Left" Width="281" Height="158" VerticalAlignment="Top" Cursor="Hand"/>
+                    <GroupBox Header="Touchpad" Margin="0,158,0,0" Height="158" VerticalAlignment="Top" HorizontalAlignment="Left" Width="281"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="DebugTab" Header="Debug" GotFocus="DebugScreen_Focused">
