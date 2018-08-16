@@ -50,13 +50,13 @@
                             <GroupBox Header="Screen Map" Margin="10,6,10,0" Height="205" VerticalAlignment="Top">
                                 <Grid>
                                     <GroupBox Header="X Offset" Height="50" VerticalAlignment="Bottom" Width="122" Margin="350,0,0,0" HorizontalAlignment="Left">
-                                        <TextBox x:Name="screenX1" Margin="2" Height="23" />
+                                        <TextBox x:Name="screenX" Margin="2" Height="23" />
                                     </GroupBox>
                                     <GroupBox Header="Width" Height="50" Margin="96,0,0,0" VerticalAlignment="Bottom" Width="122" HorizontalAlignment="Left">
-                                        <TextBox x:Name="screenX2" Margin="2" Height="23" />
+                                        <TextBox x:Name="screenWidth" Margin="2" Height="23" />
                                     </GroupBox>
                                     <GroupBox Header="Y Offset" Height="50" Margin="477,0,0,0" VerticalAlignment="Bottom" Width="122" HorizontalAlignment="Left">
-                                        <TextBox x:Name="screenY1" Margin="2" Height="23" />
+                                        <TextBox x:Name="screenY" Margin="2" Height="23" />
                                     </GroupBox>
                                     <GroupBox Header="Height" Height="50" Margin="223,0,0,0" VerticalAlignment="Bottom" Width="122" HorizontalAlignment="Left">
                                         <TextBox x:Name="screenY2" Margin="2" Height="23" />
@@ -67,16 +67,16 @@
                             <GroupBox Header="Touchpad Area" Margin="10,216,10,0" Height="205" VerticalAlignment="Top">
                                 <Grid>
                                     <GroupBox Header="X Offset" Height="50" VerticalAlignment="Bottom" Width="122" Margin="350,0,0,0" HorizontalAlignment="Left">
-                                        <TextBox x:Name="touchpadX1" Margin="2" Height="23" />
+                                        <TextBox x:Name="touchpadX" Margin="2" Height="23" />
                                     </GroupBox>
                                     <GroupBox Header="Width" Height="50" VerticalAlignment="Bottom" Width="122" Margin="96,0,0,0" HorizontalAlignment="Left">
-                                        <TextBox x:Name="touchpadX2" Margin="2" Height="23"  TextChanged="TouchpadX2_TextChanged"/>
+                                        <TextBox x:Name="touchpadWidth" Margin="2" Height="23"  TextChanged="TouchpadX2_TextChanged"/>
                                     </GroupBox>
                                     <GroupBox Header="Y Offset" Height="50" VerticalAlignment="Bottom" Width="122" Margin="477,0,0,0" HorizontalAlignment="Left">
-                                        <TextBox x:Name="touchpadY1" Margin="2" Height="23" />
+                                        <TextBox x:Name="touchpadY" Margin="2" Height="23" />
                                     </GroupBox>
                                     <GroupBox Header="Height" Height="50" VerticalAlignment="Bottom" Width="122" Margin="223,0,0,0" HorizontalAlignment="Left">
-                                        <TextBox x:Name="touchpadY2" Margin="2" Height="23" />
+                                        <TextBox x:Name="touchpadHeight" Margin="2" Height="23" />
                                     </GroupBox>
                                     <CheckBox x:Name="EnableClick" Content="Enable click" HorizontalAlignment="Left" Height="16" Margin="477,10,0,0" VerticalAlignment="Top"/>
                                     <CheckBox x:Name="DisableOnExit" Content="Disable touchpad on exit" HorizontalAlignment="Left" Height="16" Margin="477,31,0,0" VerticalAlignment="Top"/>

@@ -158,14 +158,14 @@ namespace absolutetouch_gui
             try
             {
                 // Get offsets and put into arguments
-                double touchpadX1Offset = double.Parse(touchpadX1.Text) + TouchpadXOffset.Value;
-                double touchpadY1Offset = double.Parse(touchpadY1.Text) + TouchpadYOffset.Value;
-                double touchpadX2Offset = double.Parse(touchpadX2.Text) + TouchpadXOffset.Value;
-                double touchpadY2Offset = double.Parse(touchpadY2.Text) + TouchpadYOffset.Value;
-                double screenX1Offset = double.Parse(screenX1.Text) + ScreenXOffset.Value;
-                double screenY1Offset = double.Parse(screenY1.Text) + ScreenYOffset.Value;
-                double screenX2Offset = double.Parse(screenX2.Text) + ScreenXOffset.Value;
-                double screenY2Offset = double.Parse(screenY2.Text) + ScreenYOffset.Value;
+                double touchpadX1Offset = double.Parse(touchpadX.Text);
+                double touchpadY1Offset = double.Parse(touchpadY.Text);
+                double touchpadX2Offset = double.Parse(touchpadWidth.Text) + double.Parse(touchpadX.Text);
+                double touchpadY2Offset = double.Parse(touchpadHeight.Text) + double.Parse(touchpadY.Text);
+                double screenX1Offset = double.Parse(touchpadX.Text);
+                double screenY1Offset = double.Parse(touchpadY.Text);
+                double screenX2Offset = double.Parse(screenWidth.Text) + double.Parse(touchpadX.Text);
+                double screenY2Offset = double.Parse(screenY2.Text) + double.Parse(touchpadY.Text);
                 double weight = WeightSlider.Value;
 
                 // get toggle arguments
@@ -201,15 +201,15 @@ namespace absolutetouch_gui
             DisableOnExit.IsChecked = false;
 
             // Update Textboxes
-            screenX1.Text = "0";
-            screenY1.Text = "0";
-            screenX2.Text = $"{Screen.PrimaryScreen.Bounds.Width}";
+            screenX.Text = "0";
+            screenY.Text = "0";
+            screenWidth.Text = $"{Screen.PrimaryScreen.Bounds.Width}";
             screenY2.Text = $"{Screen.PrimaryScreen.Bounds.Height}";
 
-            touchpadX1.Text = "0";
-            touchpadY1.Text = "0";
-            touchpadX2.Text = "6143";
-            touchpadY2.Text = "6143";
+            touchpadX.Text = "0";
+            touchpadY.Text = "0";
+            touchpadWidth.Text = "6143";
+            touchpadHeight.Text = "6143";
 
             WeightTextbox.Text = "0";
 
@@ -289,11 +289,11 @@ namespace absolutetouch_gui
         {
             if (LockAspectRatio.IsChecked == true)
             {
-                touchpadY2.IsEnabled = false;
+                touchpadHeight.IsEnabled = false;
             }
             else if (LockAspectRatio.IsChecked == false)
             {
-                touchpadY2.IsEnabled = true;
+                touchpadHeight.IsEnabled = true;
             }
             DebugUpdate();
             return;
@@ -329,13 +329,13 @@ namespace absolutetouch_gui
             int AspectRatioCalc = 0;
             try
             {
-                AspectRatioCalc = Convert.ToInt32((double.Parse(screenY2.Text) / double.Parse(screenX2.Text)) * double.Parse(touchpadX2.Text));
+                AspectRatioCalc = Convert.ToInt32((double.Parse(screenY2.Text) / double.Parse(screenWidth.Text)) * double.Parse(touchpadWidth.Text));
             }
             catch
             {
                 return;
             }
-            touchpadY2.Text = $"{AspectRatioCalc}";
+            touchpadHeight.Text = $"{AspectRatioCalc}";
         }
 
         // Loading & Saving setup files
@@ -356,15 +356,15 @@ namespace absolutetouch_gui
 
                     // Input settings tab
                     // Screen bounds
-                    screenX1.Text = File.ReadLines(SettingsLocation).Take(1).First();
-                    screenY1.Text = File.ReadLines(SettingsLocation).Skip(1).Take(1).First();
-                    screenX2.Text = File.ReadLines(SettingsLocation).Skip(2).Take(1).First();
+                    screenX.Text = File.ReadLines(SettingsLocation).Take(1).First();
+                    screenY.Text = File.ReadLines(SettingsLocation).Skip(1).Take(1).First();
+                    screenWidth.Text = File.ReadLines(SettingsLocation).Skip(2).Take(1).First();
                     screenY2.Text = File.ReadLines(SettingsLocation).Skip(3).Take(1).First();
                     // Touchpad bounds
-                    touchpadX1.Text = File.ReadLines(SettingsLocation).Skip(4).Take(1).First();
-                    touchpadY1.Text = File.ReadLines(SettingsLocation).Skip(5).Take(1).First();
-                    touchpadX2.Text = File.ReadLines(SettingsLocation).Skip(6).Take(1).First();
-                    touchpadY2.Text = File.ReadLines(SettingsLocation).Skip(7).Take(1).First();
+                    touchpadX.Text = File.ReadLines(SettingsLocation).Skip(4).Take(1).First();
+                    touchpadY.Text = File.ReadLines(SettingsLocation).Skip(5).Take(1).First();
+                    touchpadWidth.Text = File.ReadLines(SettingsLocation).Skip(6).Take(1).First();
+                    touchpadHeight.Text = File.ReadLines(SettingsLocation).Skip(7).Take(1).First();
                     // Sliders
                     WeightSlider.Value = double.Parse(File.ReadLines(SettingsLocation).Skip(8).Take(1).First());
                     // Checkboxes
@@ -429,15 +429,15 @@ namespace absolutetouch_gui
                     StreamWriter saveSettings = File.AppendText(SettingsLocation);
                     // Input settings tab
                     // Screen bounds
-                    saveSettings.WriteLine(screenX1.Text);
-                    saveSettings.WriteLine(screenY1.Text);
-                    saveSettings.WriteLine(screenX2.Text);
+                    saveSettings.WriteLine(screenX.Text);
+                    saveSettings.WriteLine(screenY.Text);
+                    saveSettings.WriteLine(screenWidth.Text);
                     saveSettings.WriteLine(screenY2.Text);
                     // Touchpad bounds
-                    saveSettings.WriteLine(touchpadX1.Text);
-                    saveSettings.WriteLine(touchpadY1.Text);
-                    saveSettings.WriteLine(touchpadX2.Text);
-                    saveSettings.WriteLine(touchpadY2.Text);
+                    saveSettings.WriteLine(touchpadX.Text);
+                    saveSettings.WriteLine(touchpadY.Text);
+                    saveSettings.WriteLine(touchpadWidth.Text);
+                    saveSettings.WriteLine(touchpadHeight.Text);
                     // Sliders
                     saveSettings.WriteLine(WeightSlider.Value.ToString());
                     // Checkboxes
@@ -517,14 +517,14 @@ namespace absolutetouch_gui
                 var debugtext = new StringBuilder()
                     .AppendLine($"Version: {System.Windows.Forms.Application.ProductVersion}")
                     .AppendLine($"InstallLocation: {InstallLocation}")
-                    .AppendLine($"screenX1: {screenX1.Text}")
-                    .AppendLine($"screenY1: {screenY1.Text}")
-                    .AppendLine($"screenX2: {screenX2.Text}")
+                    .AppendLine($"screenX1: {screenX.Text}")
+                    .AppendLine($"screenY1: {screenY.Text}")
+                    .AppendLine($"screenX2: {screenWidth.Text}")
                     .AppendLine($"screenY2: {screenY2.Text}")
-                    .AppendLine($"touchpadX1: {touchpadX1.Text}")
-                    .AppendLine($"touchpadY1: {touchpadY1.Text}")
-                    .AppendLine($"touchpadX2: {touchpadX2.Text}")
-                    .AppendLine($"touchpadY2: {touchpadY2.Text}")
+                    .AppendLine($"touchpadX1: {touchpadX.Text}")
+                    .AppendLine($"touchpadY1: {touchpadY.Text}")
+                    .AppendLine($"touchpadX2: {touchpadWidth.Text}")
+                    .AppendLine($"touchpadY2: {touchpadHeight.Text}")
                     .AppendLine($"weight: {WeightSlider.Value}");
                 DebugTextBlock.Text = debugtext.ToString();
             }
@@ -597,11 +597,11 @@ namespace absolutetouch_gui
         {
             if (LockAspectRatio.IsChecked == true)
             {
-                touchpadY2.IsEnabled = false;
+                touchpadHeight.IsEnabled = false;
             }
             else if (LockAspectRatio.IsChecked == false)
             {
-                touchpadY2.IsEnabled = true;
+                touchpadHeight.IsEnabled = true;
             }
             TouchpadAspectRatio();
         }
