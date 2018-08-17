@@ -14,14 +14,14 @@ There are probably plenty of bugs to be found and to be fixed, and probably some
 * Screen & touchpad coordinates
 	* Automatic detection of screen resolution
     * Automatic detection of touchpad resolution
+* Visual representation of areas
 * Weight / smoothing control
 * Screen & touchpad offset
-* Aspect ratio locking for touchpad to the screen's aspect ratio
+* Automatic aspect ratio calculation for the touchpad to the screen area's aspect ratio
 * Toggling of all program parameters
 	* Touchscreen-like click mode
 	* Automatic touchpad disable on exit
-* Saving settings to a file
-* Loading settings from a file
+* Loading & saving of setup files
 * Saving & loading default settings from root folder
 
 # Keyboard shortcuts
@@ -30,7 +30,4 @@ There are probably plenty of bugs to be found and to be fixed, and probably some
 
 # Known issues / incomplete stuff
 
-* Plotting tab still needs to be completed.
-* Not much debugging done, definitely possible to encounter issues
 * Loading/Saving system is probably inefficient and needs revision
-* Touchpad properties searching needs cleaning, possible useless variables
