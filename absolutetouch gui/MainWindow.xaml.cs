@@ -87,7 +87,7 @@ namespace absolutetouch_gui
                     }
                     catch (Exception ex)
                     {
-                        StatusbarText.Text = $"{ex}";
+                        StatusBarText.Text = $"{ex}";
                         return false; // This usually shouldn't happen but its a precaution just in case.
                     }
                     _APIAvailable = true;
@@ -250,11 +250,11 @@ namespace absolutetouch_gui
                     yDPI = ((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_YDPI)));
 
                     api.Deactivate();
-                    StatusbarText.Text = "Ready.";
+                    StatusBarText.Text = "Ready.";
                 }
                 catch (System.NullReferenceException)
                 {
-                    StatusbarText.Text = "Error while finding synaptics touchpad properties.";
+                    StatusBarText.Text = "Error while finding synaptics touchpad properties.";
                     DefaultTouchpadValues(); // use default estimated values
                     return;
                 }
@@ -262,7 +262,7 @@ namespace absolutetouch_gui
             else if (APIAvailable == false) 
             {
                 DefaultTouchpadValues();
-                StatusbarText.Text = "Warning: Synaptics touchpad drivers are missing. Using default values.";
+                StatusBarText.Text = "Warning: Synaptics touchpad drivers are missing. Using default values.";
             }
             return;
         }
@@ -324,9 +324,9 @@ namespace absolutetouch_gui
             {
                 AspectRatioCalc = Convert.ToInt32((double.Parse(screenHeight.Text) / double.Parse(screenWidth.Text)) * double.Parse(touchpadWidth.Text));
             }
-            catch
+            catch(Exception ex)
             {
-                return;
+                StatusBarText.Text = $"{ex}";                
             }
             touchpadHeight.Text = $"{AspectRatioCalc}";
         }
@@ -342,7 +342,7 @@ namespace absolutetouch_gui
             // Screen map area
             rectangleScreenMap = new Rectangle
             {
-                Stroke = Brushes.Black,
+                Stroke = Brushes.Transparent,
                 Width = 5,
                 Height = 5,
                 StrokeThickness = 1.0,
@@ -366,7 +366,7 @@ namespace absolutetouch_gui
             // Touchpad map area 
             rectangleTouchMap = new Rectangle
             {
-                Stroke = Brushes.Black,
+                Stroke = Brushes.Transparent,
                 Width = 5,
                 Height = 5,
                 StrokeThickness = 1.0,
@@ -412,6 +412,34 @@ namespace absolutetouch_gui
             double height = Convert.ToDouble(screenHeight.Text);
             double xOffset = Convert.ToDouble(screenX.Text);
             double yOffset = Convert.ToDouble(screenY.Text);
+
+            // Max & min values
+            if (xOffset < 0)
+            {
+                xOffset = 0;
+            }
+            else if (xOffset + width > desktopResolution.Width)
+            {
+                xOffset = desktopResolution.Width - width;
+                if (xOffset < 0)
+                {
+                    xOffset = 0;
+                }
+            }
+            screenX.Text = xOffset.ToString();
+            if (yOffset < 0)
+            {
+                yOffset = 0;
+            }
+            else if (yOffset + height > desktopResolution.Height)
+            {
+                yOffset = desktopResolution.Height - height;
+                if (yOffset < 0)
+                {
+                    yOffset = 0;
+                }
+            }
+            screenY.Text = yOffset.ToString();
 
             // Centered offset
             double offsetX = canvasScreenMap.ActualWidth / 2.0 - desktopResolution.Width * scale / 2.0;
@@ -464,6 +492,34 @@ namespace absolutetouch_gui
             double height = Convert.ToDouble(touchpadHeight.Text);
             double xOffset = Convert.ToDouble(touchpadX.Text);
             double yOffset = Convert.ToDouble(touchpadY.Text);
+
+            // Max & min values
+            if (xOffset < 0)
+            {
+                xOffset = 0;
+            }
+            else if (xOffset + width > touchpadResolution.Width)
+            {
+                xOffset = touchpadResolution.Width - width;
+                if (xOffset < 0)
+                {
+                    xOffset = 0;
+                }
+            }
+            touchpadX.Text = xOffset.ToString();
+            if (yOffset < 0)
+            {
+                yOffset = 0;
+            }
+            else if (yOffset + height > touchpadResolution.Height)
+            {
+                yOffset = touchpadResolution.Height - height;
+                if (yOffset < 0)
+                {
+                    yOffset = 0;
+                }
+            }
+            touchpadY.Text = yOffset.ToString();
 
             // Centered offset
             double offsetX = canvasTouchpadArea.ActualWidth / 2.0 - touchpadResolution.Width  * scale / 2.0;
@@ -634,11 +690,11 @@ namespace absolutetouch_gui
                 SettingsLocation = Directory.GetCurrentDirectory() + @"\AbsoluteTouchDefault.setup";
                 if (APIAvailable == false)
                 {
-                    StatusbarText.Text = "Warning: Synaptics touchpad drivers are missing. Default settings loaded.";
+                    StatusBarText.Text = "Warning: Synaptics touchpad drivers are missing. Default settings loaded.";
                 }
                 else if (APIAvailable == true)
                 {
-                    StatusbarText.Text = StatusbarText.Text + " Default settings loaded.";
+                    StatusBarText.Text = StatusBarText.Text + " Default settings loaded.";
                 }
                 LoadSettings();
             }

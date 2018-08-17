@@ -61,7 +61,7 @@
                                     <GroupBox Header="Y Offset" Height="50" Margin="477,0,0,0" VerticalAlignment="Bottom" Width="122" HorizontalAlignment="Left">
                                         <TextBox x:Name="screenY" Margin="2" Height="23" TextChanged="SettingsTextChanged" />
                                     </GroupBox>
-                                    <Canvas x:Name="canvasScreenMap" Cursor="Hand" Background="Transparent" ClipToBounds="True" Margin="0,0,0,53" Height="130" MouseDown="canvasScreenMap_MouseDown"/>
+                                    <Canvas x:Name="canvasScreenMap" Cursor="Hand" Background="Transparent" ClipToBounds="True" Margin="0,0,0,53" Height="130" MouseDown="canvasScreenMap_MouseDown" SnapsToDevicePixels="True"/>
                                 </Grid>
                             </GroupBox>
                             <GroupBox Header="Touchpad Area" Margin="10,216,10,0" Height="205" VerticalAlignment="Top">
@@ -81,7 +81,7 @@
                                     <CheckBox x:Name="EnableClick" Content="Enable click" HorizontalAlignment="Left" Height="16" Margin="477,10,0,0" VerticalAlignment="Top"/>
                                     <CheckBox x:Name="DisableOnExit" Content="Disable touchpad on exit" HorizontalAlignment="Left" Height="16" Margin="477,31,0,0" VerticalAlignment="Top"/>
                                     <CheckBox x:Name="LockAspectRatio" Content="Lock aspect ratio" HorizontalAlignment="Left" Height="16" Margin="477,52,0,0" VerticalAlignment="Top" Click="LockAspectRatio_Click"/>
-                                    <Canvas x:Name="canvasTouchpadArea" Cursor="Hand" ClipToBounds="True" Height="130" Width="250" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                                    <Canvas x:Name="canvasTouchpadArea" Cursor="Hand" ClipToBounds="True" Height="130" Width="250" HorizontalAlignment="Center" VerticalAlignment="Top" SnapsToDevicePixels="True"/>
                                 </Grid>
                             </GroupBox>
 
@@ -122,7 +122,7 @@
             </TabItem>
         </TabControl>
         <StatusBar VerticalAlignment="Bottom" Height="18" Background="White" HorizontalAlignment="Left">
-            <TextBlock x:Name="StatusbarText" Height="18" Margin="0,-3"/>
+            <TextBlock x:Name="StatusBarText" Height="18" Margin="0,-3"/>
         </StatusBar>
     </Grid>
 </Window>
