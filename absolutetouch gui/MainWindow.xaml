@@ -106,14 +106,22 @@
                             <Button x:Name="FindInstallLocationButton" Content="Find..." HorizontalAlignment="Right" Margin="504,2,2,0" VerticalAlignment="Top" Height="23" Width="60" Click="FindInstallLocationButton_Click"/>
                         </Grid>
                     </GroupBox>
-                    <CheckBox x:Name="debuggingCheckbox" Content="Enable debugging" HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Margin="10,55,0,0" Click="UpdateDebugTab"/>
+                    <CheckBox x:Name="debuggingCheckbox" Content="Show Debug tab" HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Margin="10,55,0,0" Click="UpdateDebugTab"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="DebugTab" Header="Debug" GotFocus="DebugScreen_Focused">
                 <Grid>
                     <GroupBox Header="Debug" Margin="0,0,0,50">
                         <Grid>
-                            <TextBlock x:Name="DebugTextBlock" MouseLeftButtonDown="DebugTextBlock_MouseLeftButtonDown"/>
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                                <TextBlock x:Name="Debug" Background="Black" Foreground="White" FontFamily="Lucida Console" Padding="2" Margin="2">
+                                    <TextBlock.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Copy all" Click="CopyDebug_Click"/>
+                                        </ContextMenu>
+                                    </TextBlock.ContextMenu>
+                                </TextBlock>
+                            </ScrollViewer>
                         </Grid>
                     </GroupBox>
                     <Button x:Name="ForceCanvasUpdate" Content="Force canvas update" HorizontalAlignment="Center" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,10" Padding="5,1" Click="ForceCanvasUpdate_Click"/>

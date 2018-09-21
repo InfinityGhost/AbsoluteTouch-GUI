@@ -43,7 +43,7 @@ namespace absolutetouch_gui
         #region Variables
         // Process
         public System.Diagnostics.Process absoluteTouchProcess;
-        
+
         // Resolutions
         public double TouchpadWidth { get; set; }
         public double TouchpadHeight { get; set; }
@@ -54,8 +54,8 @@ namespace absolutetouch_gui
         int DeviceHandle { get; set; }
         int xMin, xMax, yMin, yMax, xDPI, yDPI;
 
-        //// Canvas objects
-        
+        // Canvas objects
+        // ---------
         // Screen
         public Rectangle rectangleScreenMap;
         public Rectangle rectangleDesktop;
@@ -64,8 +64,8 @@ namespace absolutetouch_gui
         public Rectangle rectangleTouchpad;
         public Rectangle rectangleTouchMap;
 
-        //// Setters / Getters
-
+        // Setters / Getters
+        // ---------
         // API checking
         private bool _APIAvailable = false;
         private bool APIAvailable
@@ -87,7 +87,7 @@ namespace absolutetouch_gui
                     }
                     catch (Exception ex)
                     {
-                        StatusBarText.Text = $"{ex}";
+                        Status(ex.ToString());
                         return false; // This usually shouldn't happen but its a precaution just in case.
                     }
                     _APIAvailable = true;
@@ -100,7 +100,7 @@ namespace absolutetouch_gui
             }
         }
 
-        // EXE path
+        // Executable path
         private string _InstallLocation;
         public string InstallLocation
         {
@@ -139,22 +139,22 @@ namespace absolutetouch_gui
             //-w weight      | weight Sets the touch smoothing weight factor(0 to 1, default 0)
             //-d             | Enables debug mode(may reduce performance)
             //-c             | Enables touchscreen-like clicking
-            
+
             CollectInformation();
             try
             {
                 absoluteTouchProcess.Start();
             }
-            catch(System.ComponentModel.Win32Exception)
+            catch (System.ComponentModel.Win32Exception)
             {
                 System.Windows.Forms.MessageBox.Show("Error: invalid program executable.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            catch(System.NullReferenceException)
+            catch (System.NullReferenceException)
             {
                 return;
             }
-            catch(System.InvalidOperationException)
+            catch (System.InvalidOperationException)
             {
                 System.Windows.Forms.MessageBox.Show("Error: Cannot start process because an executable has not been provided.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 SetupTab.IsSelected = true;
@@ -182,11 +182,11 @@ namespace absolutetouch_gui
                 string otherArguments = String.Empty;
                 if (EnableClick.IsChecked == true)
                 {
-                    otherArguments = "-c";
+                    otherArguments += "-c ";
                 }
                 if (DisableOnExit.IsChecked == true)
                 {
-                    otherArguments = $"{otherArguments} -m";
+                    otherArguments += "-m ";
                 }
                 // set up arguments
                 programArguments = $"-s {screenX1Offset},{screenY1Offset},{screenX2Offset},{screenY2Offset} -t {touchpadX1Offset},{touchpadY1Offset},{touchpadX2Offset},{touchpadY2Offset} -w {weight} {otherArguments}";
@@ -250,19 +250,19 @@ namespace absolutetouch_gui
                     yDPI = ((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_YDPI)));
 
                     api.Deactivate();
-                    StatusBarText.Text = "Ready.";
+                    Status("Ready.");
                 }
                 catch (System.NullReferenceException)
                 {
-                    StatusBarText.Text = "Error while finding synaptics touchpad properties.";
+                    Status("Error while finding synaptics touchpad properties.");
                     DefaultTouchpadValues(); // use default estimated values
                     return;
                 }
             }
-            else if (APIAvailable == false) 
+            else if (APIAvailable == false)
             {
                 DefaultTouchpadValues();
-                StatusBarText.Text = "Warning: Synaptics touchpad drivers are missing. Using default values.";
+                Status("Warning: Synaptics touchpad drivers are missing. Using default values.");
             }
             return;
         }
@@ -288,7 +288,14 @@ namespace absolutetouch_gui
             {
                 touchpadHeight.IsEnabled = true;
             }
-            DebugUpdate();
+            if (debuggingCheckbox.IsChecked == true)
+            {
+                DebugTab.SetValue(VisibilityProperty, Visibility.Visible);
+            }
+            else if (debuggingCheckbox.IsChecked == false)
+            {
+                DebugTab.SetValue(VisibilityProperty, Visibility.Hidden);
+            }
             return;
         }
 
@@ -300,7 +307,7 @@ namespace absolutetouch_gui
                 Filter = "Executible Files (*.exe)|*.exe|All files (*.*)|*.*",
                 RestoreDirectory = true
             };
-            
+
             if (location.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 try
@@ -314,7 +321,7 @@ namespace absolutetouch_gui
                 }
                 return location.FileName;
             }
-            return InstallLocationTextbox.Text; 
+            return InstallLocationTextbox.Text;
         }
 
         private void TouchpadAspectRatio()
@@ -324,9 +331,9 @@ namespace absolutetouch_gui
             {
                 AspectRatioCalc = Convert.ToInt32((double.Parse(screenHeight.Text) / double.Parse(screenWidth.Text)) * double.Parse(touchpadWidth.Text));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                StatusBarText.Text = $"{ex}";                
+                Status(ex.ToString());
             }
             touchpadHeight.Text = $"{AspectRatioCalc}";
         }
@@ -391,7 +398,7 @@ namespace absolutetouch_gui
             UpdateScreenCanvas();
             UpdateTouchpadCanvas();
         }
-        
+
         void UpdateScreenCanvas()
         {
             Rectangle desktopResolution = new Rectangle
@@ -456,7 +463,7 @@ namespace absolutetouch_gui
             rectangleScreenMap.Height = height * scale;
             Canvas.SetLeft(rectangleScreenMap, offsetX + xOffset * scale);
             Canvas.SetTop(rectangleScreenMap, offsetY + yOffset * scale);
-                        
+
         }
 
         void UpdateTouchpadCanvas()
@@ -522,7 +529,7 @@ namespace absolutetouch_gui
             touchpadY.Text = yOffset.ToString();
 
             // Centered offset
-            double offsetX = canvasTouchpadArea.ActualWidth / 2.0 - touchpadResolution.Width  * scale / 2.0;
+            double offsetX = canvasTouchpadArea.ActualWidth / 2.0 - touchpadResolution.Width * scale / 2.0;
             double offsetY = canvasTouchpadArea.ActualHeight / 2.0 - touchpadResolution.Height * scale / 2.0;
 
             // Touchpad area
@@ -581,7 +588,7 @@ namespace absolutetouch_gui
                         // Textboxes
                         InstallLocationTextbox.Text = File.ReadLines(SettingsLocation).Skip(13).Take(1).First();
                     }
-                    
+
                 }
                 catch (System.ArgumentException)
                 {
@@ -662,7 +669,7 @@ namespace absolutetouch_gui
                 return;
             }
         }
-        
+
         private void SaveSettingsDialog()
         {
             SaveFileDialog openFile = new SaveFileDialog
@@ -690,11 +697,11 @@ namespace absolutetouch_gui
                 SettingsLocation = Directory.GetCurrentDirectory() + @"\AbsoluteTouchDefault.setup";
                 if (APIAvailable == false)
                 {
-                    StatusBarText.Text = "Warning: Synaptics touchpad drivers are missing. Default settings loaded.";
+                    Status("Warning: Synaptics touchpad drivers are missing. Default settings loaded.");
                 }
                 else if (APIAvailable == true)
                 {
-                    StatusBarText.Text = StatusBarText.Text + " Default settings loaded.";
+                    StatusAdd("Default settings loaded.");
                 }
                 LoadSettings();
             }
@@ -717,39 +724,44 @@ namespace absolutetouch_gui
 
         #region Debugging
 
-        public void DebugUpdate()
+        public void DebugUpdate(string text)
         {
-            if (debuggingCheckbox.IsChecked == true)
+            if (Debug.Text == string.Empty)
             {
-                DebugTab.Visibility = Visibility.Visible;
-
-                DebugTextBlock.Text = null; // clear textblock
-                var debugtext = new StringBuilder()
-                    .AppendLine($"Version: {System.Windows.Forms.Application.ProductVersion}")
-                    .AppendLine($"InstallLocation: {InstallLocation}")
-                    .AppendLine($"screenX1: {screenX.Text}")
-                    .AppendLine($"screenY1: {screenY.Text}")
-                    .AppendLine($"screenX2: {screenWidth.Text}")
-                    .AppendLine($"screenY2: {screenHeight.Text}")
-                    .AppendLine($"touchpadX1: {touchpadX.Text}")
-                    .AppendLine($"touchpadY1: {touchpadY.Text}")
-                    .AppendLine($"touchpadX2: {touchpadWidth.Text}")
-                    .AppendLine($"touchpadY2: {touchpadHeight.Text}")
-                    .AppendLine($"weight: {WeightSlider.Value}");
-                DebugTextBlock.Text = debugtext.ToString();
+                Debug.Text += text;
             }
-            else if (debuggingCheckbox.IsChecked == false)
+            else
             {
-                DebugTab.Visibility = Visibility.Hidden;
-                DebugTextBlock.Text = null;
+                Debug.Text += Environment.NewLine + text;
             }
         }
 
-        void CopyDebugInfo()
+        void DebugCopy()
         {
-            System.Windows.Forms.Clipboard.SetText(DebugTextBlock.Text);
+            System.Windows.Forms.Clipboard.SetText(Debug.Text);
         }
-        
+
+        void DebugClear()
+        {
+            Debug.Text = string.Empty;
+        }
+
+        #endregion
+
+        #region StatusBar Methods
+
+        void Status(string text)
+        {
+            StatusBarText.Text = text;
+            DebugUpdate("Status: " + text);
+        }
+
+        void StatusAdd(string text)
+        {
+            StatusBarText.Text += text;
+            DebugUpdate("Status: " + StatusBarText.Text);
+        }
+
         #endregion
 
         #region  Button Methods
@@ -781,7 +793,7 @@ namespace absolutetouch_gui
             {
                 WeightTextbox.Text = $"{WeightSlider.Value}";
             }
-            catch(ArgumentNullException)
+            catch (ArgumentNullException)
             {
                 return;
             }
@@ -794,7 +806,7 @@ namespace absolutetouch_gui
             {
                 WeightSlider.Value = double.Parse(WeightTextbox.Text);
             }
-            catch(ArgumentException)
+            catch (ArgumentException)
             {
                 return;
             }
@@ -802,7 +814,7 @@ namespace absolutetouch_gui
         }
 
         private void GetResolution_Click(object sender, RoutedEventArgs e) => Defaults();
-        
+
         private void LockAspectRatio_Click(object sender, RoutedEventArgs e)
         {
             if (LockAspectRatio.IsChecked == true)
@@ -826,9 +838,9 @@ namespace absolutetouch_gui
             {
                 UpdateCanvasObjects();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                //StatusbarText.Text = $"{ex}";
+                //DebugUpdate(ex.ToString());
             }
         }
 
@@ -856,19 +868,21 @@ namespace absolutetouch_gui
 
         private void AboutButton_Click(object sender, RoutedEventArgs e)
         {
-            AboutBox box = new AboutBox();  
+            AboutBox box = new AboutBox();
             box.ShowDialog();
         }
 
         // Debug
 
-        private void DebugScreen_Focused(object sender, RoutedEventArgs e) => DebugUpdate();
+        private void DebugScreen_Focused(object sender, RoutedEventArgs e) { }
 
-        private void UpdateDebugTab(object sender, RoutedEventArgs e) => DebugUpdate();
-
-        private void DebugTextBlock_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => CopyDebugInfo();
+        private void UpdateDebugTab(object sender, RoutedEventArgs e) => UpdateUseableOptions();
 
         private void ForceCanvasUpdate_Click(object sender, RoutedEventArgs e) => UpdateCanvasObjects();
+
+        private void CopyDebug_Click(object sender, RoutedEventArgs e) => DebugCopy();
+
+        private void ClearDebug_Click(object sender, RoutedEventArgs e) => DebugClear();
 
         #endregion
     }
