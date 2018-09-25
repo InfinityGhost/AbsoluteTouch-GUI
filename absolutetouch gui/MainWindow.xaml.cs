@@ -107,7 +107,6 @@ namespace absolutetouch_gui
 
         // Setting files
         public string SettingsLocation { get; set; }
-        public double SettingsVersion => 1.1;
 
         #endregion
 
@@ -153,7 +152,10 @@ namespace absolutetouch_gui
                 absoluteTouchProcess = new System.Diagnostics.Process();
                 absoluteTouchProcess.StartInfo.FileName = settings.InstallLocation;
                 absoluteTouchProcess.StartInfo.Arguments = settings.ProgramArguments;
-                DebugUpdate(absoluteTouchProcess.StartInfo.ToString());
+                if(DebugTab.IsVisible == true)
+                {
+                    DebugUpdate(absoluteTouchProcess.StartInfo.ToString());
+                }
             }
             catch (System.FormatException ex)
             {
@@ -524,33 +526,28 @@ namespace absolutetouch_gui
             {
                 try
                 {
-                    //  -- Note --
-                    //  This code could probably be cleaned up / improved, possibly StreamReader?
-                    string localSettingsVersion = File.ReadLines(SettingsLocation).Take(1).First(); // get selected file version
-                    if (localSettingsVersion == SettingsVersion.ToString())
+                    string[] newSettings = File.ReadAllLines(SettingsLocation);
+                    if (newSettings[0] == settings.Version.ToString())
                     {
-                        //// Input settings tab
-                        // Screen bounds
-                        screenX.Text = File.ReadLines(SettingsLocation).Skip(1).Take(1).First();
-                        screenY.Text = File.ReadLines(SettingsLocation).Skip(2).Take(1).First();
-                        screenWidth.Text = File.ReadLines(SettingsLocation).Skip(3).Take(1).First();
-                        screenHeight.Text = File.ReadLines(SettingsLocation).Skip(4).Take(1).First();
-                        // Touchpad bounds
-                        touchpadX.Text = File.ReadLines(SettingsLocation).Skip(5).Take(1).First();
-                        touchpadY.Text = File.ReadLines(SettingsLocation).Skip(6).Take(1).First();
-                        touchpadWidth.Text = File.ReadLines(SettingsLocation).Skip(7).Take(1).First();
-                        touchpadHeight.Text = File.ReadLines(SettingsLocation).Skip(8).Take(1).First();
-                        // Sliders
-                        WeightSlider.Value = double.Parse(File.ReadLines(SettingsLocation).Skip(9).Take(1).First());
-                        // Checkboxes
-                        LockAspectRatio.IsChecked = bool.Parse(File.ReadLines(SettingsLocation).Skip(10).Take(1).First());
-                        EnableClick.IsChecked = bool.Parse(File.ReadLines(SettingsLocation).Skip(11).Take(1).First());
-                        DisableOnExit.IsChecked = bool.Parse(File.ReadLines(SettingsLocation).Skip(12).Take(1).First());
-                        //// Setup tab
-                        // Textboxes
-                        InstallLocationTextbox.Text = File.ReadLines(SettingsLocation).Skip(13).Take(1).First();
-                    }
+                        string[] touchpad = newSettings[1].Split(',');
+                        string[] screen = newSettings[2].Split(',');
 
+                        screenWidth.Text = screen[0];
+                        screenHeight.Text = screen[1];
+                        screenX.Text = screen[2];
+                        screenY.Text = screen[3];
+
+                        touchpadWidth.Text = touchpad[0];
+                        touchpadHeight.Text = touchpad[1];
+                        touchpadX.Text = touchpad[2];
+                        touchpadY.Text = touchpad[3];
+
+                        WeightSlider.Value = Convert.ToDouble(newSettings[3]);
+                        InstallLocationTextbox.Text = newSettings[4];
+                        LockAspectRatio.IsChecked = Convert.ToBoolean(newSettings[5]);
+                        EnableClick.IsChecked = Convert.ToBoolean(newSettings[6]);
+                        DisableOnExit.IsChecked = Convert.ToBoolean(newSettings[7]);
+                    }
                 }
                 catch (System.ArgumentException)
                 {
@@ -596,32 +593,13 @@ namespace absolutetouch_gui
                 try
                 {
                     File.WriteAllText(SettingsLocation, String.Empty);
-                    StreamWriter saveSettings = File.AppendText(SettingsLocation);
-                    //// Input settings tab
-                    saveSettings.WriteLine(SettingsVersion); // added to allow for new savable things to be added
-                    // Screen bounds
-                    saveSettings.WriteLine(screenX.Text);
-                    saveSettings.WriteLine(screenY.Text);
-                    saveSettings.WriteLine(screenWidth.Text);
-                    saveSettings.WriteLine(screenHeight.Text);
-                    // Touchpad bounds
-                    saveSettings.WriteLine(touchpadX.Text);
-                    saveSettings.WriteLine(touchpadY.Text);
-                    saveSettings.WriteLine(touchpadWidth.Text);
-                    saveSettings.WriteLine(touchpadHeight.Text);
-                    // Sliders
-                    saveSettings.WriteLine(WeightSlider.Value.ToString());
-                    // Checkboxes
-                    saveSettings.WriteLine(LockAspectRatio.IsChecked.ToString());
-                    saveSettings.WriteLine(EnableClick.IsChecked.ToString());
-                    saveSettings.WriteLine(DisableOnExit.IsChecked.ToString());
-                    //// Setup tab
-                    // Textboxes
-                    saveSettings.WriteLine(InstallLocationTextbox.Text);
-                    saveSettings.Close();
+                    StreamWriter save = File.AppendText(SettingsLocation);
+                    Array.ForEach(settings.Dump(), setting => save.WriteLine(setting));
+                    save.Close();
                 }
-                catch (System.ArgumentException)
+                catch (System.ArgumentException ex)
                 {
+                    DebugUpdate(ex.ToString());
                     return;
                 }
                 catch (Exception ex)
@@ -719,6 +697,11 @@ namespace absolutetouch_gui
             }
         }
 
+        public void DebugWrite(string[] text)
+        {
+            Array.ForEach(text, e => DebugUpdate(e));
+        }
+
         void DebugCopy()
         {
             System.Windows.Forms.Clipboard.SetText(Debug.Text);
@@ -733,12 +716,34 @@ namespace absolutetouch_gui
         {
             System.Windows.Forms.MessageBox.Show("Error: " + errorText, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             DebugUpdate(errorText);
-            DebugUpdate(ex.ToString());
+            if(ex is null == false)
+            {
+                DebugUpdate(ex.ToString());
+            }
         }
 
         void RunDebugCommand(object sender, RoutedEventArgs e)
         {
-            
+            var item = ButtonOptions.SelectedItem as ComboBoxItem;
+            string activeCommand = item.Name;
+            switch (activeCommand)
+            {
+                case "SettingsDump":
+                    {
+                        DumpSettings(settings);
+                        return;
+                    }
+                case "CollectInformation":
+                    {
+                        CollectInformation();
+                        return;
+                    }
+                case null:
+                    {
+                        ErrorPopup("Selected item is null.", null);
+                        return;
+                    }
+            }
         }
 
         void AddDebugCommands(string[] Commands)
@@ -753,12 +758,21 @@ namespace absolutetouch_gui
 
         void GetComboBoxItems()
         {
-            string[] items = new string[]
+            var DebugItems = new string[]
             {
                 "SettingsDump",
                 "CollectInformation",
             };
-            AddDebugCommands(items);
+            AddDebugCommands(DebugItems);
+        }
+
+        #endregion
+
+        #region Debug Methods
+
+        void DumpSettings(Settings s)
+        {
+            DebugWrite(settings.Dump());
         }
 
         #endregion
@@ -812,7 +826,7 @@ namespace absolutetouch_gui
             {
                 return;
             }
-            return;
+            SettingsTextChanged(sender, null);
         }
 
         private void WeightTextbox_TextChanged(object sender, TextChangedEventArgs e)
@@ -830,17 +844,9 @@ namespace absolutetouch_gui
 
         private void GetResolution_Click(object sender, RoutedEventArgs e) => Defaults();
 
-        private void LockAspectRatio_Click(object sender, RoutedEventArgs e)
+        private void Checkbox_Click(object sender, RoutedEventArgs e)
         {
-            if (LockAspectRatio.IsChecked == true)
-            {
-                touchpadHeight.IsEnabled = false;
-            }
-            else if (LockAspectRatio.IsChecked == false)
-            {
-                touchpadHeight.IsEnabled = true;
-            }
-            TouchpadAspectRatio();
+            SettingsTextChanged(sender, null);
         }
 
         private void SettingsTextChanged(object sender, TextChangedEventArgs e)
@@ -904,6 +910,7 @@ namespace absolutetouch_gui
 
     public class Settings
     {
+        public double Version = 1.2;
         public Area TouchpadArea = new Area();
         public Area ScreenArea = new Area();
         public double Weight;
@@ -935,6 +942,23 @@ namespace absolutetouch_gui
                 return args;
             }
         }
+
+        public string[] Dump()
+        {
+            string[] dump = new string[]
+            {
+                Version.ToString(),
+                TouchpadArea.ToString(),
+                ScreenArea.ToString(),
+                Weight.ToString(),
+                InstallLocation,
+                LockAspectRatio.ToString(),
+                EnableClick.ToString(),
+                DisableOnExit.ToString(),
+                ProgramArguments,
+            };
+            return dump;
+        }
     }
 
     public class Area
@@ -951,5 +975,10 @@ namespace absolutetouch_gui
         public int Height;
         public int X;
         public int Y;
+
+        public override string ToString()
+        {
+            return $"{Width},{Height},{X},{Y}";
+        }
     }
 }

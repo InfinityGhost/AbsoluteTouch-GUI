@@ -80,7 +80,7 @@
                                     </GroupBox>
                                     <CheckBox x:Name="EnableClick" Content="Enable click" HorizontalAlignment="Left" Height="16" Margin="477,10,0,0" VerticalAlignment="Top"/>
                                     <CheckBox x:Name="DisableOnExit" Content="Disable touchpad on exit" HorizontalAlignment="Left" Height="16" Margin="477,31,0,0" VerticalAlignment="Top"/>
-                                    <CheckBox x:Name="LockAspectRatio" Content="Lock aspect ratio" HorizontalAlignment="Left" Height="16" Margin="477,52,0,0" VerticalAlignment="Top" Click="LockAspectRatio_Click"/>
+                                    <CheckBox x:Name="LockAspectRatio" Content="Lock aspect ratio" HorizontalAlignment="Left" Height="16" Margin="477,52,0,0" VerticalAlignment="Top" Click="Checkbox_Click"/>
                                     <Canvas x:Name="canvasTouchpadArea" Cursor="Hand" ClipToBounds="True" Height="130" Width="250" HorizontalAlignment="Center" VerticalAlignment="Top" SnapsToDevicePixels="True"/>
                                 </Grid>
                             </GroupBox>
