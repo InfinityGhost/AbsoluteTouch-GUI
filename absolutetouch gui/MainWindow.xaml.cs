@@ -43,21 +43,19 @@ namespace absolutetouch_gui
         }
 
         #region Variables
+        
         // Process
         public System.Diagnostics.Process absoluteTouchProcess;
 
-        // TESTING***
+        // Custom classes
         public Settings settings = new Settings();
-
-        // Resolutions
-        public double TouchpadWidth { get; set; }
-        public double TouchpadHeight { get; set; }
-
-        //// Synaptics API variables
+        public Touchpad touchpad = new Touchpad();
+        
+        // Synaptics API variables
         SYNCTRLLib.SynAPICtrl api;
         SYNCTRLLib.SynDeviceCtrl device;
         int DeviceHandle { get; set; }
-        int xMin, xMax, yMin, yMax, xDPI, yDPI;
+        int xLoSensor, xHiSensor, yLoSensor, yHiSensor, xDPI, yDPI;
 
         // Canvas objects
         // ---------
@@ -69,8 +67,6 @@ namespace absolutetouch_gui
         public Rectangle rectangleTouchpad;
         public Rectangle rectangleTouchMap;
 
-        // Setters / Getters
-        // ---------
         // API checking
         private bool _APIAvailable = false;
         private bool APIAvailable
@@ -105,6 +101,7 @@ namespace absolutetouch_gui
             }
         }
 
+        // ---------
         // Setting files
         public string SettingsLocation { get; set; }
 
@@ -140,7 +137,7 @@ namespace absolutetouch_gui
             {
                 ErrorPopup("Cannot start process because an executable has not been provided.", ex);
                 SetupTab.IsSelected = true;
-                FindInstallLocation();
+                InstallLocationTextbox.Text = FindInstallLocation();
             }
         }
 
@@ -204,12 +201,12 @@ namespace absolutetouch_gui
                     device.Select(DeviceHandle);
                     device.Activate();
 
-                    xMin = int.Parse((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_XLoSensor).ToString()));
-                    xMax = int.Parse((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_XHiSensor).ToString()));
-                    yMin = int.Parse((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_YLoSensor).ToString()));
-                    yMax = int.Parse((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_YHiSensor).ToString()));
-                    xDPI = ((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_XDPI)));
-                    yDPI = ((device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_YDPI)));
+                    touchpad.xLoSensor = int.Parse(device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_XLoSensor).ToString());
+                    touchpad.xHiSensor = int.Parse(device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_XHiSensor).ToString());
+                    touchpad.yLoSensor = int.Parse(device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_YLoSensor).ToString());
+                    touchpad.yHiSensor = int.Parse(device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_YHiSensor).ToString());
+                    touchpad.xDPI = (device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_XDPI));
+                    touchpad.yDPI = (device.GetLongProperty(SYNCTRLLib.SynDeviceProperty.SP_YDPI));
 
                     api.Deactivate();
                     Status("Ready.");
@@ -217,26 +214,13 @@ namespace absolutetouch_gui
                 catch (System.NullReferenceException)
                 {
                     Status("Error while finding synaptics touchpad properties.");
-                    DefaultTouchpadValues(); // use default estimated values
                     return;
                 }
             }
             else if (APIAvailable == false)
             {
-                DefaultTouchpadValues();
                 Status("Warning: Synaptics touchpad drivers are missing. Using default values.");
             }
-            return;
-        }
-
-        private void DefaultTouchpadValues()
-        {
-            xMin = 0;
-            xMax = 6143;
-            yMin = 0;
-            yMax = 6143;
-            xDPI = 0;
-            yDPI = 0;
             return;
         }
 
@@ -272,18 +256,12 @@ namespace absolutetouch_gui
 
             if (location.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                try
-                {
-                    InstallLocationTextbox.Text = location.FileName;
-                }
-                catch (ArgumentNullException)
-                {
-                    InstallLocationTextbox.Text = String.Empty;
-                    FindInstallLocation();
-                }
                 return location.FileName;
             }
-            return InstallLocationTextbox.Text;
+            else
+            {
+                return null;
+            }
         }
 
         private void TouchpadAspectRatio()
@@ -432,26 +410,8 @@ namespace absolutetouch_gui
 
         void UpdateTouchpadCanvas()
         {
-            Rectangle touchpadResolution;
-            if (_APIAvailable == true)
-            {
-                touchpadResolution = new Rectangle
-                {
-                    Width = xMax - xMin,
-                    Height = yMax - yMin
-                };
-            }
-            else
-            {
-                touchpadResolution = new Rectangle
-                {
-                    Width = 6143,
-                    Height = 6143
-                };
-            }
-
-            double scaleX = (canvasTouchpadArea.ActualWidth) / touchpadResolution.Width;
-            double scaleY = (canvasTouchpadArea.ActualHeight) / touchpadResolution.Height;
+            double scaleX = (canvasTouchpadArea.ActualWidth) / touchpad.Properties.Width;
+            double scaleY = (canvasTouchpadArea.ActualHeight) / touchpad.Properties.Height;
             double scale = scaleX;
             if (scaleX > scaleY)
             {
@@ -469,9 +429,9 @@ namespace absolutetouch_gui
             {
                 xOffset = 0;
             }
-            else if (xOffset + width > touchpadResolution.Width)
+            else if (xOffset + width > touchpad.Properties.Width)
             {
-                xOffset = touchpadResolution.Width - width;
+                xOffset = touchpad.Properties.Width - width;
                 if (xOffset < 0)
                 {
                     xOffset = 0;
@@ -482,9 +442,9 @@ namespace absolutetouch_gui
             {
                 yOffset = 0;
             }
-            else if (yOffset + height > touchpadResolution.Height)
+            else if (yOffset + height > touchpad.Properties.Height)
             {
-                yOffset = touchpadResolution.Height - height;
+                yOffset = touchpad.Properties.Height - height;
                 if (yOffset < 0)
                 {
                     yOffset = 0;
@@ -493,12 +453,12 @@ namespace absolutetouch_gui
             touchpadY.Text = yOffset.ToString();
 
             // Centered offset
-            double offsetX = canvasTouchpadArea.ActualWidth / 2.0 - touchpadResolution.Width * scale / 2.0;
-            double offsetY = canvasTouchpadArea.ActualHeight / 2.0 - touchpadResolution.Height * scale / 2.0;
+            double offsetX = canvasTouchpadArea.ActualWidth / 2.0 - touchpad.Properties.Width * scale / 2.0;
+            double offsetY = canvasTouchpadArea.ActualHeight / 2.0 - touchpad.Properties.Height * scale / 2.0;
 
             // Touchpad area
-            rectangleTouchpad.Width = touchpadResolution.Width * scale;
-            rectangleTouchpad.Height = touchpadResolution.Height * scale;
+            rectangleTouchpad.Width = touchpad.Properties.Width * scale;
+            rectangleTouchpad.Height = touchpad.Properties.Height * scale;
             Canvas.SetLeft(rectangleTouchpad, offsetX);
             Canvas.SetTop(rectangleTouchpad, offsetY);
 
@@ -673,12 +633,7 @@ namespace absolutetouch_gui
 
         public void RunShortcut(Object sender, ExecutedRoutedEventArgs e) => RunAbsoluteTouch();
 
-        public void SaveShortcut(Object sender, ExecutedRoutedEventArgs e)
-        {
-            SaveSettingsDialog();
-            SaveSettings();
-            return;
-        }
+        public void SaveShortcut(Object sender, ExecutedRoutedEventArgs e) => SaveSettings(SaveSettingsDialog());
 
         #endregion
 
@@ -921,6 +876,38 @@ namespace absolutetouch_gui
                 ProgramArguments,
             };
             return dump;
+        }
+    }
+
+    public class Touchpad
+    {
+        public int xLoSensor;
+        public int xHiSensor;
+        public int yLoSensor;
+        public int yHiSensor;
+        public double xDPI;
+        public double yDPI;
+
+        public Touchpad()
+        {
+            xLoSensor = 0;
+            xHiSensor = 6143;
+            yLoSensor = 0;
+            yHiSensor = 6143;
+            xDPI = 0;
+            yDPI = 0;
+        }
+
+        public Rectangle Properties
+        {
+            get
+            {
+                return new Rectangle
+                {
+                    Width = xHiSensor - xLoSensor,
+                    Height = yHiSensor - yLoSensor,
+                };
+            }
         }
     }
 

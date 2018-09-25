@@ -101,7 +101,7 @@
                 <Grid>
                     <GroupBox Header="AbsoluteTouch Install Location" Height="50" VerticalAlignment="Top">
                         <Grid>
-                            <TextBox Margin="2,2,68,0" Height="23" VerticalAlignment="Top" TextChanged="SettingsTextChanged"/>
+                            <TextBox x:Name="InstallLocationTextbox" Margin="2,2,68,0" Height="23" VerticalAlignment="Top" TextChanged="SettingsTextChanged"/>
                             <Button Content="Find..." HorizontalAlignment="Right" Margin="504,2,2,0" VerticalAlignment="Top" Height="23" Width="60" Click="FindInstallLocationButton"/>
                         </Grid>
                     </GroupBox>
