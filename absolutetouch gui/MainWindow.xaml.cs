@@ -37,7 +37,6 @@ namespace absolutetouch_gui
 
             // Canvas work
             CreateCanvasObjects();
-            UpdateCanvasObjects();
         }
 
         #region Variables
@@ -145,18 +144,18 @@ namespace absolutetouch_gui
             {
                 absoluteTouchProcess.Start();
             }
-            catch (System.ComponentModel.Win32Exception)
+            catch (System.ComponentModel.Win32Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Error: invalid program executable.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ErrorPopup("Invalid program executable.", ex);
                 return;
             }
             catch (System.NullReferenceException)
             {
                 return;
             }
-            catch (System.InvalidOperationException)
+            catch (System.InvalidOperationException ex)
             {
-                System.Windows.Forms.MessageBox.Show("Error: Cannot start process because an executable has not been provided.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ErrorPopup("Cannot start process because an executable has not been provided.", ex);
                 SetupTab.IsSelected = true;
                 FindInstallLocation();
             }
@@ -195,9 +194,9 @@ namespace absolutetouch_gui
                 absoluteTouchProcess.StartInfo.FileName = InstallLocation;
                 absoluteTouchProcess.StartInfo.Arguments = programArguments;
             }
-            catch (System.FormatException)
+            catch (System.FormatException ex)
             {
-                System.Windows.Forms.MessageBox.Show("Error: Values were not in the correct format", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ErrorPopup("Values were not in the correct format", ex);
                 Defaults();
             }
             return;
@@ -333,7 +332,7 @@ namespace absolutetouch_gui
             }
             catch (Exception ex)
             {
-                Status(ex.ToString());
+                DebugUpdate(ex.ToString());
             }
             touchpadHeight.Text = $"{AspectRatioCalc}";
         }
@@ -391,6 +390,8 @@ namespace absolutetouch_gui
                 Fill = Brushes.Transparent
             };
             canvasTouchpadArea.Children.Add(rectangleTouchpad);
+
+            UpdateCanvasObjects();
         }
 
         void UpdateCanvasObjects()
@@ -596,7 +597,7 @@ namespace absolutetouch_gui
                 }
                 catch (Exception ex)
                 {
-                    System.Windows.Forms.MessageBox.Show($"An error has occured while loading. {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ErrorPopup("An error has occured while loading.", ex);
                     return;
                 }
             }
@@ -664,7 +665,7 @@ namespace absolutetouch_gui
                 }
                 catch (Exception ex)
                 {
-                    System.Windows.Forms.MessageBox.Show($"An error has occured while saving. {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ErrorPopup("An error has occured while saving.", ex);
                 }
                 return;
             }
@@ -722,7 +723,7 @@ namespace absolutetouch_gui
 
         #endregion
 
-        #region Debugging
+        #region Debugging, Error Handling
 
         public void DebugUpdate(string text)
         {
@@ -744,6 +745,13 @@ namespace absolutetouch_gui
         void DebugClear()
         {
             Debug.Text = string.Empty;
+        }
+
+        void ErrorPopup(string errorText, Exception ex)
+        {
+            System.Windows.Forms.MessageBox.Show("Error: " + errorText, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            DebugUpdate(errorText);
+            DebugUpdate(ex.ToString());
         }
 
         #endregion
@@ -878,9 +886,7 @@ namespace absolutetouch_gui
 
         private void UpdateDebugTab(object sender, RoutedEventArgs e) => UpdateUseableOptions();
 
-        private void ForceCanvasUpdate_Click(object sender, RoutedEventArgs e) => UpdateCanvasObjects();
-
-        private void CopyDebug_Click(object sender, RoutedEventArgs e) => DebugCopy();
+        private void CopyDebug_Click(object sender, RoutedEventArgs e) => DebugCopy();  
 
         private void ClearDebug_Click(object sender, RoutedEventArgs e) => DebugClear();
 
