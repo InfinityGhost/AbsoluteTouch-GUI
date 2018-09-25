@@ -515,10 +515,10 @@ namespace absolutetouch_gui
 
         // Loading & Saving settings files
 
-        public void LoadSettings()
+        public void LoadSettings(string location)
         {
             // Begin loading settings from text file
-            if (SettingsLocation == null)
+            if (location == null)
             {
                 return;
             }
@@ -526,7 +526,7 @@ namespace absolutetouch_gui
             {
                 try
                 {
-                    string[] newSettings = File.ReadAllLines(SettingsLocation);
+                    string[] newSettings = File.ReadAllLines(location);
                     if (newSettings[0] == settings.Version.ToString())
                     {
                         string[] touchpad = newSettings[1].Split(',');
@@ -563,7 +563,7 @@ namespace absolutetouch_gui
             return;
         }
 
-        private void LoadSettingsDialog()
+        private string LoadSettingsDialog()
         {
             OpenFileDialog openFile = new OpenFileDialog
             {
@@ -573,18 +573,18 @@ namespace absolutetouch_gui
             };
             if (openFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                SettingsLocation = openFile.FileName;
+                return openFile.FileName;
             }
             else
             {
-                SettingsLocation = null;
+                return null;
             }
         }
 
-        public void SaveSettings()
+        public void SaveSettings(string location)
         {
             // Begin saving settings to text file
-            if (SettingsLocation == null)
+            if (location == null)
             {
                 return;
             }
@@ -592,7 +592,7 @@ namespace absolutetouch_gui
             {
                 try
                 {
-                    File.WriteAllText(SettingsLocation, String.Empty);
+                    File.WriteAllText(location, String.Empty);
                     StreamWriter save = File.AppendText(SettingsLocation);
                     Array.ForEach(settings.Dump(), setting => save.WriteLine(setting));
                     save.Close();
@@ -610,7 +610,7 @@ namespace absolutetouch_gui
             }
         }
 
-        private void SaveSettingsDialog()
+        private string SaveSettingsDialog()
         {
             SaveFileDialog openFile = new SaveFileDialog
             {
@@ -621,13 +621,12 @@ namespace absolutetouch_gui
             };
             if (openFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                SettingsLocation = openFile.FileName;
+                return openFile.FileName;
             }
             else
             {
-                SettingsLocation = null;
+                return null;
             }
-            return;
         }
 
         public void DefaultSettingsCheck()
@@ -643,7 +642,7 @@ namespace absolutetouch_gui
                 {
                     StatusAdd("Default settings loaded.");
                 }
-                LoadSettings();
+                LoadSettings(SettingsLocation);
             }
         }
 
@@ -795,26 +794,11 @@ namespace absolutetouch_gui
 
         #region  Button Methods
 
-        private void InstallLocationTextbox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            // Update install location variable
-            try
-            {
-                settings.InstallLocation = InstallLocationTextbox.Text;
-            }
-            catch
-            {
-                settings.InstallLocation = "C:\\";
-                return;
-            }
-            return;
-        }
-
         private void ExitButton_Click(object sender, RoutedEventArgs e) => Close();
 
-        private void FindInstallLocationButton_Click(object sender, RoutedEventArgs e) => settings.InstallLocation = FindInstallLocation();
+        private void FindInstallLocationButton(object sender, RoutedEventArgs e) => settings.InstallLocation = FindInstallLocation();
 
-        private void UpdateArgumentsButton_Click(object sender, RoutedEventArgs e) => CollectInformation();
+        private void ResetToDefaults(object sender, RoutedEventArgs e) => Defaults();
 
         private void WeightSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
@@ -822,10 +806,7 @@ namespace absolutetouch_gui
             {
                 WeightTextbox.Text = $"{WeightSlider.Value}";
             }
-            catch (ArgumentNullException)
-            {
-                return;
-            }
+            catch (ArgumentException) { }
             SettingsTextChanged(sender, null);
         }
 
@@ -835,26 +816,15 @@ namespace absolutetouch_gui
             {
                 WeightSlider.Value = double.Parse(WeightTextbox.Text);
             }
-            catch (ArgumentException)
-            {
-                return;
-            }
-            return;
-        }
-
-        private void GetResolution_Click(object sender, RoutedEventArgs e) => Defaults();
-
-        private void Checkbox_Click(object sender, RoutedEventArgs e)
-        {
+            catch (ArgumentException) { }
             SettingsTextChanged(sender, null);
         }
 
+        private void Checkbox_Click(object sender, RoutedEventArgs e) => SettingsTextChanged(sender, null);
+
         private void SettingsTextChanged(object sender, TextChangedEventArgs e)
         {
-            if (LockAspectRatio.IsChecked == true)
-            {
-                TouchpadAspectRatio();
-            }
+            if (LockAspectRatio.IsChecked == true) TouchpadAspectRatio();
             try
             {
                 UpdateCanvasObjects();
@@ -869,22 +839,17 @@ namespace absolutetouch_gui
 
         // Load / Save buttons
 
-        private void LoadSettingsButton_Click(object sender, RoutedEventArgs e)
-        {
-            LoadSettingsDialog();
-            LoadSettings();
-        }
+        private void LoadSettingsButton_Click(object sender, RoutedEventArgs e) => LoadSettings(LoadSettingsDialog());
 
         private void SaveSettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            SaveSettingsDialog();
-            SaveSettings();
+            SaveSettings(SaveSettingsDialog());
         }
 
         private void SaveDefaultButton_Click(object sender, RoutedEventArgs e)
         {
             SettingsLocation = Directory.GetCurrentDirectory() + @"\AbsoluteTouchDefault.setup";
-            SaveSettings();
+            SaveSettings(SettingsLocation);
         }
 
         private void canvasScreenMap_MouseDown(object sender, MouseButtonEventArgs e) => UpdateCanvasObjects();
@@ -896,8 +861,6 @@ namespace absolutetouch_gui
         }
 
         // Debug
-
-        private void DebugScreen_Focused(object sender, RoutedEventArgs e) { }
 
         private void UpdateDebugTab(object sender, RoutedEventArgs e) => UpdateUseableOptions();
 

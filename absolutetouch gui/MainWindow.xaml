@@ -37,10 +37,9 @@
 
             </MenuItem>
             <MenuItem Header="Settings" Height="24">
-                <MenuItem x:Name="GetResolution" Header="Reset to default" Click="GetResolution_Click"/>
-                <MenuItem x:Name="UpdateArgumentsButton" Header="Force arguments update" Click="UpdateArgumentsButton_Click"/>
+                <MenuItem Header="Reset to default" Click="ResetToDefaults"/>
             </MenuItem>
-            <MenuItem x:Name="RunMenuButton" Header="Run" Command="{StaticResource RunProgram}" InputGestureText="Ctrl+R"/>
+            <MenuItem Header="Run" Command="{StaticResource RunProgram}" InputGestureText="Ctrl+R"/>
         </Menu>
         <TabControl Margin="0,25,0,18">
             <TabItem x:Name="InputSettingsTab" Header="Input Settings">
@@ -102,14 +101,14 @@
                 <Grid>
                     <GroupBox Header="AbsoluteTouch Install Location" Height="50" VerticalAlignment="Top">
                         <Grid>
-                            <TextBox x:Name="InstallLocationTextbox" Margin="2,2,68,0" Height="23" VerticalAlignment="Top" TextChanged="InstallLocationTextbox_TextChanged"/>
-                            <Button x:Name="FindInstallLocationButton" Content="Find..." HorizontalAlignment="Right" Margin="504,2,2,0" VerticalAlignment="Top" Height="23" Width="60" Click="FindInstallLocationButton_Click"/>
+                            <TextBox Margin="2,2,68,0" Height="23" VerticalAlignment="Top" TextChanged="SettingsTextChanged"/>
+                            <Button Content="Find..." HorizontalAlignment="Right" Margin="504,2,2,0" VerticalAlignment="Top" Height="23" Width="60" Click="FindInstallLocationButton"/>
                         </Grid>
                     </GroupBox>
                     <CheckBox x:Name="debuggingCheckbox" Content="Show Debug tab" HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Margin="10,55,0,0" Click="UpdateDebugTab"/>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="DebugTab" Header="Debug" GotFocus="DebugScreen_Focused">
+            <TabItem x:Name="DebugTab" Header="Debug">
                 <Grid Margin="-1,0,1,0">
                     <GroupBox Header="Debug" Margin="0,0,0,50" BorderBrush="#FFACACAC">
                         <Grid>
