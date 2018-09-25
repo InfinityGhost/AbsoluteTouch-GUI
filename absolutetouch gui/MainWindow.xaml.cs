@@ -54,8 +54,7 @@ namespace absolutetouch_gui
         // Synaptics API variables
         SYNCTRLLib.SynAPICtrl api;
         SYNCTRLLib.SynDeviceCtrl device;
-        int DeviceHandle { get; set; }
-        int xLoSensor, xHiSensor, yLoSensor, yHiSensor, xDPI, yDPI;
+        int DeviceHandle;
 
         // Canvas objects
         // ---------
@@ -67,6 +66,7 @@ namespace absolutetouch_gui
         public Rectangle rectangleTouchpad;
         public Rectangle rectangleTouchMap;
 
+        // ---------
         // API checking
         private bool _APIAvailable = false;
         private bool APIAvailable
@@ -183,7 +183,6 @@ namespace absolutetouch_gui
             WeightTextbox.Text = "0";
 
             GetTouchpadProperties();
-
             UpdateUseableOptions();
             return;
         }
@@ -410,8 +409,8 @@ namespace absolutetouch_gui
 
         void UpdateTouchpadCanvas()
         {
-            double scaleX = (canvasTouchpadArea.ActualWidth) / touchpad.Properties.Width;
-            double scaleY = (canvasTouchpadArea.ActualHeight) / touchpad.Properties.Height;
+            double scaleX = (canvasTouchpadArea.ActualWidth) / touchpad.Width;
+            double scaleY = (canvasTouchpadArea.ActualHeight) / touchpad.Height;
             double scale = scaleX;
             if (scaleX > scaleY)
             {
@@ -429,9 +428,9 @@ namespace absolutetouch_gui
             {
                 xOffset = 0;
             }
-            else if (xOffset + width > touchpad.Properties.Width)
+            else if (xOffset + width > touchpad.Width)
             {
-                xOffset = touchpad.Properties.Width - width;
+                xOffset = touchpad.Width - width;
                 if (xOffset < 0)
                 {
                     xOffset = 0;
@@ -442,9 +441,9 @@ namespace absolutetouch_gui
             {
                 yOffset = 0;
             }
-            else if (yOffset + height > touchpad.Properties.Height)
+            else if (yOffset + height > touchpad.Height)
             {
-                yOffset = touchpad.Properties.Height - height;
+                yOffset = touchpad.Height - height;
                 if (yOffset < 0)
                 {
                     yOffset = 0;
@@ -453,12 +452,12 @@ namespace absolutetouch_gui
             touchpadY.Text = yOffset.ToString();
 
             // Centered offset
-            double offsetX = canvasTouchpadArea.ActualWidth / 2.0 - touchpad.Properties.Width * scale / 2.0;
-            double offsetY = canvasTouchpadArea.ActualHeight / 2.0 - touchpad.Properties.Height * scale / 2.0;
+            double offsetX = canvasTouchpadArea.ActualWidth / 2.0 - touchpad.Width * scale / 2.0;
+            double offsetY = canvasTouchpadArea.ActualHeight / 2.0 - touchpad.Height * scale / 2.0;
 
             // Touchpad area
-            rectangleTouchpad.Width = touchpad.Properties.Width * scale;
-            rectangleTouchpad.Height = touchpad.Properties.Height * scale;
+            rectangleTouchpad.Width = touchpad.Width * scale;
+            rectangleTouchpad.Height = touchpad.Height * scale;
             Canvas.SetLeft(rectangleTouchpad, offsetX);
             Canvas.SetTop(rectangleTouchpad, offsetY);
 
@@ -829,13 +828,24 @@ namespace absolutetouch_gui
     public class Settings
     {
         public double Version = 1.2;
-        public Area TouchpadArea = new Area();
-        public Area ScreenArea = new Area();
+        public Area TouchpadArea;
+        public Area ScreenArea;
         public double Weight;
         public string InstallLocation;
         public bool LockAspectRatio;
         public bool EnableClick;
         public bool DisableOnExit;
+
+        public Settings()
+        {
+            TouchpadArea = new Area();
+            ScreenArea = new Area();
+            Weight = 0;
+            InstallLocation = string.Empty;
+            LockAspectRatio = false;
+            EnableClick = false;
+            DisableOnExit = false;
+        }
 
         public string ProgramArguments
         {
@@ -863,7 +873,7 @@ namespace absolutetouch_gui
 
         public string[] Dump()
         {
-            string[] dump = new string[]
+            return new string[]
             {
                 Version.ToString(),
                 TouchpadArea.ToString(),
@@ -875,7 +885,6 @@ namespace absolutetouch_gui
                 DisableOnExit.ToString(),
                 ProgramArguments,
             };
-            return dump;
         }
     }
 
@@ -897,6 +906,9 @@ namespace absolutetouch_gui
             xDPI = 0;
             yDPI = 0;
         }
+
+        public double Width => Properties.Width;
+        public double Height => Properties.Height;
 
         public Rectangle Properties
         {
