@@ -110,7 +110,7 @@
                 </Grid>
             </TabItem>
             <TabItem x:Name="DebugTab" Header="Debug" GotFocus="DebugScreen_Focused">
-                <Grid>
+                <Grid Margin="-1,0,1,0">
                     <GroupBox Header="Debug" Margin="0,0,0,50" BorderBrush="#FFACACAC">
                         <Grid>
                             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
@@ -125,8 +125,8 @@
                             </ScrollViewer>
                         </Grid>
                     </GroupBox>
-                    <ComboBox x:Name="ButtonOptions"  Width="150" Height="24" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,13" />
-                    <Button Content="Run command" HorizontalAlignment="Center" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,10" Padding="5,1" Click="ForceCanvasUpdate_Click" Width="150"/>
+                    <ComboBox x:Name="ButtonOptions"  Width="150" Height="24" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,13" SelectedIndex="0"/>
+                    <Button Content="Run command" HorizontalAlignment="Center" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,10" Padding="5,1" Click="RunDebugCommand"  Width="150"/>
 
                 </Grid>
             </TabItem>

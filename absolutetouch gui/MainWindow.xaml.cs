@@ -37,11 +37,17 @@ namespace absolutetouch_gui
 
             // Canvas work
             CreateCanvasObjects();
+
+            // Debugging
+            GetComboBoxItems();
         }
 
         #region Variables
         // Process
         public System.Diagnostics.Process absoluteTouchProcess;
+
+        // TESTING***
+        public Settings settings = new Settings();
 
         // Resolutions
         public double TouchpadWidth { get; set; }
@@ -99,28 +105,6 @@ namespace absolutetouch_gui
             }
         }
 
-        // Executable path
-        private string _InstallLocation;
-        public string InstallLocation
-        {
-            get
-            {
-                if (_InstallLocation == null)
-                {
-                    _InstallLocation = FindInstallLocation();
-                    return _InstallLocation;
-                }
-                else
-                {
-                    return _InstallLocation;
-                }
-            }
-            set
-            {
-                _InstallLocation = value;
-            }
-        }
-
         // Setting files
         public string SettingsLocation { get; set; }
         public double SettingsVersion => 1.1;
@@ -163,36 +147,13 @@ namespace absolutetouch_gui
 
         private void CollectInformation()
         {
-            string programArguments;
             try
             {
-                // Get offsets and put into arguments
-                double touchpadX1Offset = double.Parse(touchpadX.Text);
-                double touchpadY1Offset = double.Parse(touchpadY.Text);
-                double touchpadX2Offset = double.Parse(touchpadWidth.Text) + double.Parse(touchpadX.Text);
-                double touchpadY2Offset = double.Parse(touchpadHeight.Text) + double.Parse(touchpadY.Text);
-                double screenX1Offset = double.Parse(screenX.Text);
-                double screenY1Offset = double.Parse(screenY.Text);
-                double screenX2Offset = double.Parse(screenWidth.Text) + double.Parse(screenX.Text);
-                double screenY2Offset = double.Parse(screenHeight.Text) + double.Parse(screenY.Text);
-                double weight = WeightSlider.Value;
-
-                // get toggle arguments
-                string otherArguments = String.Empty;
-                if (EnableClick.IsChecked == true)
-                {
-                    otherArguments += "-c ";
-                }
-                if (DisableOnExit.IsChecked == true)
-                {
-                    otherArguments += "-m ";
-                }
-                // set up arguments
-                programArguments = $"-s {screenX1Offset},{screenY1Offset},{screenX2Offset},{screenY2Offset} -t {touchpadX1Offset},{touchpadY1Offset},{touchpadX2Offset},{touchpadY2Offset} -w {weight} {otherArguments}";
-                // set info
+                UpdateSettings();
                 absoluteTouchProcess = new System.Diagnostics.Process();
-                absoluteTouchProcess.StartInfo.FileName = InstallLocation;
-                absoluteTouchProcess.StartInfo.Arguments = programArguments;
+                absoluteTouchProcess.StartInfo.FileName = settings.InstallLocation;
+                absoluteTouchProcess.StartInfo.Arguments = settings.ProgramArguments;
+                DebugUpdate(absoluteTouchProcess.StartInfo.ToString());
             }
             catch (System.FormatException ex)
             {
@@ -708,6 +669,27 @@ namespace absolutetouch_gui
             }
         }
 
+        private void UpdateSettings()
+        {
+            // Install information
+            settings.InstallLocation = InstallLocationTextbox.Text;
+            // Touchpad settings
+            settings.TouchpadArea.X = int.Parse(touchpadX.Text);
+            settings.TouchpadArea.Y = int.Parse(touchpadY.Text);
+            settings.TouchpadArea.Width = int.Parse(touchpadWidth.Text);
+            settings.TouchpadArea.Height = int.Parse(touchpadHeight.Text);
+            settings.Weight = WeightSlider.Value;
+            // Screen settings
+            settings.ScreenArea.X = int.Parse(screenX.Text);
+            settings.ScreenArea.Y = int.Parse(screenY.Text);
+            settings.ScreenArea.Width = int.Parse(screenWidth.Text);
+            settings.ScreenArea.Height = int.Parse(screenHeight.Text);
+            // Others
+            settings.EnableClick = EnableClick.IsChecked.Value;
+            settings.DisableOnExit = DisableOnExit.IsChecked.Value;
+            settings.LockAspectRatio = LockAspectRatio.IsChecked.Value;
+        }
+
         #endregion
 
         #region Keyboard Shortcuts
@@ -754,6 +736,31 @@ namespace absolutetouch_gui
             DebugUpdate(ex.ToString());
         }
 
+        void RunDebugCommand(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        void AddDebugCommands(string[] Commands)
+        {
+            Array.ForEach(Commands, item => ButtonOptions.Items.Add(new ComboBoxItem
+            {
+                Content = item,
+                Name = item
+            })
+            );
+        }
+
+        void GetComboBoxItems()
+        {
+            string[] items = new string[]
+            {
+                "SettingsDump",
+                "CollectInformation",
+            };
+            AddDebugCommands(items);
+        }
+
         #endregion
 
         #region StatusBar Methods
@@ -779,11 +786,11 @@ namespace absolutetouch_gui
             // Update install location variable
             try
             {
-                InstallLocation = InstallLocationTextbox.Text;
+                settings.InstallLocation = InstallLocationTextbox.Text;
             }
             catch
             {
-                InstallLocation = "C:\\";
+                settings.InstallLocation = "C:\\";
                 return;
             }
             return;
@@ -791,7 +798,7 @@ namespace absolutetouch_gui
 
         private void ExitButton_Click(object sender, RoutedEventArgs e) => Close();
 
-        private void FindInstallLocationButton_Click(object sender, RoutedEventArgs e) => InstallLocation = FindInstallLocation();
+        private void FindInstallLocationButton_Click(object sender, RoutedEventArgs e) => settings.InstallLocation = FindInstallLocation();
 
         private void UpdateArgumentsButton_Click(object sender, RoutedEventArgs e) => CollectInformation();
 
@@ -846,10 +853,12 @@ namespace absolutetouch_gui
             {
                 UpdateCanvasObjects();
             }
-            catch (Exception ex)
+            catch { }
+            try
             {
-                //DebugUpdate(ex.ToString());
+                UpdateSettings();
             }
+            catch { }
         }
 
         // Load / Save buttons
@@ -891,5 +900,56 @@ namespace absolutetouch_gui
         private void ClearDebug_Click(object sender, RoutedEventArgs e) => DebugClear();
 
         #endregion
+    }
+
+    public class Settings
+    {
+        public Area TouchpadArea = new Area();
+        public Area ScreenArea = new Area();
+        public double Weight;
+        public string InstallLocation;
+        public bool LockAspectRatio;
+        public bool EnableClick;
+        public bool DisableOnExit;
+
+        public string ProgramArguments
+        {
+            get
+            {
+                string args = string.Empty;
+                // screen area
+                args += $"-s {ScreenArea.X},{ScreenArea.Y},{ScreenArea.Width + ScreenArea.X},{ScreenArea.Height + ScreenArea.Y} ";
+                // touchpad area
+                args += $"-t {TouchpadArea.X},{TouchpadArea.Y},{TouchpadArea.Width + TouchpadArea.X},{TouchpadArea.Height + TouchpadArea.Y} ";
+                // weight
+                args += $"-w {Weight} ";
+                // other arguments
+                if (EnableClick == true)
+                {
+                    args += "-c ";
+                }
+                if (DisableOnExit == true)
+                {
+                    args += "-m ";
+                }
+                return args;
+            }
+        }
+    }
+
+    public class Area
+    {
+        public Area()
+        {
+            Width = 0;
+            Height = 0;
+            X = 0;
+            Y = 0;
+        }
+
+        public int Width;
+        public int Height;
+        public int X;
+        public int Y;
     }
 }
